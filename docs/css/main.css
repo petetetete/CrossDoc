@@ -3,39 +3,10 @@ html, body {
     padding: 0;
     margin: 0;
 
-    background-color: #298cff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
 }
 
-h2 {
-    margin-top: 0;
-    margin-bottom: .5rem;
-}
-
-p {
-    margin-top: 0;
-    margin-bottom: 1rem;
-}
-
-.page-container {
-    text-align: center;
-    padding: 10px 30px;
-}
-
-.splash {
-    width: 72vw;
-    height: auto;
-    max-height: 58vh;
-    margin: 25px 0;
-}
-
-.intro-text {
-    color: #fff;
-    font-size: 1.8em;
-    font-family: 'Asap Condensed', sans-serif;
-}
-
-.under-construction {
-    color: #ffcc00;
-    text-shadow: 0 1px rgba(0,0,0,0.8);
-    font-weight: 700;
+* {
+    box-sizing: border-box;
 }
