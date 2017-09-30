@@ -58,7 +58,7 @@ html, body {
         display: inline-flex;
         align-items: center;
 
-        padding: 0 17px;
+        padding: 0 15px;
 
         font-size: 1.3rem;
         font-weight: 300;
@@ -80,7 +80,7 @@ html, body {
     margin-bottom: 10px;
 
     min-height: 140px;
-    background-color: #292929;
+    background-color: #191932;
 
     color: #fff;
     text-shadow: 1px 1px #000;
@@ -91,20 +91,20 @@ html, body {
     .page-head__container {
         max-width: 960px;
         margin: 0 auto;
-        padding: 25px 20px 32px 20px;
+        padding: 30px 20px;
     }
 
     .page-head__heading {
         margin-top: 0;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         font-weight: 300;
         line-height: 54px;
-        font-size: 2.7rem;
+        font-size: 2.65rem;
     }
 
     .page-head__paragraph {
-        margin: 0;
-        font-size: 1.25rem;
+        margin: 0 0 8px 0;
+        font-size: 1.2rem;
     }
 
 
@@ -144,6 +144,26 @@ html, body {
             margin-left: 0;
             overflow: hidden;
         }
+        /* Fade options to blue on mobile */
+        .nav__overflow::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+
+            height: 100%;
+            width: 13px;
+
+            border-left: 4px solid #298cff;
+
+            background: rgba(41,141,255,1);
+            background: -moz-linear-gradient(left, rgba(41,141,255,1) 0%, rgba(41,140,255,0) 100%);
+            background: -webkit-gradient(left top, right top, color-stop(0%, rgba(41,141,255,1)), color-stop(100%, rgba(41,140,255,0)));
+            background: -webkit-linear-gradient(left, rgba(41,141,255,1) 0%, rgba(41,140,255,0) 100%);
+            background: -o-linear-gradient(left, rgba(41,141,255,1) 0%, rgba(41,140,255,0) 100%);
+            background: -ms-linear-gradient(left, rgba(41,141,255,1) 0%, rgba(41,140,255,0) 100%);
+            background: linear-gradient(to right, rgba(41,141,255,1) 0%, rgba(41,140,255,0) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#298dff', endColorstr='#298cff', GradientType=1 );
+        }
         .nav__overflow::after {
             content: "";
             position: absolute;
@@ -154,14 +174,14 @@ html, body {
 
             border-right: 4px solid #298cff;
 
-            background: rgba(248,80,50,0);
-            background: -moz-linear-gradient(left, rgba(248,80,50,0) 0%, rgba(41,141,255,1) 100%);
-            background: -webkit-gradient(left top, right top, color-stop(0%, rgba(248,80,50,0)), color-stop(100%, rgba(41,141,255,1)));
-            background: -webkit-linear-gradient(left, rgba(248,80,50,0) 0%, rgba(41,141,255,1) 100%);
-            background: -o-linear-gradient(left, rgba(248,80,50,0) 0%, rgba(41,141,255,1) 100%);
-            background: -ms-linear-gradient(left, rgba(248,80,50,0) 0%, rgba(41,141,255,1) 100%);
-            background: linear-gradient(to right, rgba(248,80,50,0) 0%, rgba(41,141,255,1) 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f85032', endColorstr='#298dff', GradientType=1 );
+            background: rgba(41,141,255,0);
+            background: -moz-linear-gradient(left, rgba(41,141,255,0) 0%, rgba(41,140,255,1) 100%);
+            background: -webkit-gradient(left top, right top, color-stop(0%, rgba(41,141,255,0)), color-stop(100%, rgba(41,140,255,1)));
+            background: -webkit-linear-gradient(left, rgba(41,141,255,0) 0%, rgba(41,140,255,1) 100%);
+            background: -o-linear-gradient(left, rgba(41,141,255,0) 0%, rgba(41,140,255,1) 100%);
+            background: -ms-linear-gradient(left, rgba(41,141,255,0) 0%, rgba(41,140,255,1) 100%);
+            background: linear-gradient(to right, rgba(41,141,255,0) 0%, rgba(41,140,255,1) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#298dff', endColorstr='#298cff', GradientType=1 );
         }
 
         .nav__link {
@@ -181,12 +201,17 @@ html, body {
     .page-head {
         margin-top: 0;
     }
+        .page-head__container {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
         .page-head__heading {
-            font-size: 2.5rem;
+            font-size: 2.3rem;
+            margin-bottom: 8px;
         }
 
         .page-head__paragraph {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
         }
 
 }
