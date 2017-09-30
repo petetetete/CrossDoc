@@ -1,21 +1,43 @@
+/* To be replaced by bootstrap */
+html, body {
+    padding: 0;
+    margin: 0;
+
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #555;
+    font-size: 16px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
 .nav {
     background-color: #298cff;
     position: fixed;
+    top: 0;
+    z-index: 1;
     width: 100%;
-    box-shadow: 0 1px 0 rgba(12,13,14,0.1), 0 1px 3px rgba(12,13,14,0.1), 0 4px 20px rgba(12,13,14,0.035), 0 1px 1px rgba(12,13,14,0.025);
+    box-shadow: 0 2px 2px rgba(0,0,0,.23);
+    /* box-shadow: 0 1px 0 rgba(12,13,14,0.1), 0 1px 3px rgba(12,13,14,0.1), 0 4px 20px rgba(12,13,14,0.035), 0 1px 1px rgba(12,13,14,0.025); */
 }
     .nav__container {
         display: flex;
-        /*max-width: 960px;
-        margin: 0 auto;*/
+        max-width: 960px;
+        margin: 0 auto;
     }
 
     .nav__logo {
-        padding: 8px;
+        padding: 6px 10px;
         height: 65px;
     }
     .nav__logo-img {
         height: 100%;
+    }
+
+    .nav__overflow {
+        margin-left: auto;
     }
 
     .nav__options {
@@ -38,25 +60,59 @@
 
         padding: 0 17px;
 
-        font-size: 1.2rem;
+        font-size: 1.3rem;
+        font-weight: 300;
+        text-shadow: 1px 1px rgba(50,50,50,0.3);
 
         text-decoration: none;
         color: #fff;
+        transition: background-color cubic-bezier(.165, .84, .44, 1) .2s;
     }
     .nav__logo:hover, .nav__logo:active,
     .nav__link:hover, .nav__link:active {
         background-color: #0D7BFF;
-        transition: background-color cubic-bezier(.165, .84, .44, 1) .25s;
+        transition: none;
     }
 
-    .nav__space {
-        height: 65px;
-        margin-bottom: 15px;
+
+.page-head {
+    margin-top: 65px;
+    margin-bottom: 10px;
+
+    min-height: 140px;
+    background-color: #292929;
+
+    color: #fff;
+    text-shadow: 1px 1px #000;
+
+    border-bottom: 4px solid #298cff;
+    box-shadow: 0 1px 0 rgba(12,13,14,0.1), 0 1px 3px rgba(12,13,14,0.1), 0 4px 20px rgba(12,13,14,0.035), 0 1px 1px rgba(12,13,14,0.025);
+}
+    .page-head__container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 25px 20px 32px 20px;
     }
 
-.page-container {
+    .page-head__heading {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-weight: 300;
+        line-height: 54px;
+        font-size: 2.7rem;
+    }
+
+    .page-head__paragraph {
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+
+.body-container {
     max-width: 960px;
     margin: 0 auto;
+
+    line-height: 24px;
 
     padding: 10px 20px;
 }
@@ -71,7 +127,8 @@
             align-items: center;
         }
         .nav__logo {
-            height: 70px;
+            margin-top: 4px;
+            height: 78px;
         }
         .nav__options {
             height: auto;
@@ -81,9 +138,10 @@
 
         .nav__overflow {
             position: relative;
-            height: 38px;
+            height: 42px;
             max-width: 100%;
             margin-bottom: 5px;
+            margin-left: 0;
             overflow: hidden;
         }
         .nav__overflow::after {
@@ -107,7 +165,7 @@
         }
 
         .nav__link {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             padding-top: 5px;
             padding-bottom: 5px;
         }
@@ -118,6 +176,17 @@
 
         .nav__space {
             height: 0;
+        }
+
+    .page-head {
+        margin-top: 0;
+    }
+        .page-head__heading {
+            font-size: 2.5rem;
+        }
+
+        .page-head__paragraph {
+            font-size: 1.15rem;
         }
 
 }
