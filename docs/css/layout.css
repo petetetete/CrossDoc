@@ -1,10 +1,9 @@
-/* To be replaced by bootstrap */
 html, body {
     padding: 0;
     margin: 0;
 
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    color: #555;
+    color: #444;
     font-size: 16px;
 }
 
@@ -20,7 +19,6 @@ html, body {
     z-index: 1;
     width: 100%;
     box-shadow: 0 2px 2px rgba(0,0,0,.23);
-    /* box-shadow: 0 1px 0 rgba(12,13,14,0.1), 0 1px 3px rgba(12,13,14,0.1), 0 4px 20px rgba(12,13,14,0.035), 0 1px 1px rgba(12,13,14,0.025); */
 }
     .nav__container {
         display: flex;
@@ -29,8 +27,8 @@ html, body {
     }
 
     .nav__logo {
-        padding: 6px 10px;
-        height: 65px;
+        padding: 5px 12px;
+        height: 68px;
     }
     .nav__logo-img {
         height: 100%;
@@ -58,25 +56,25 @@ html, body {
         display: inline-flex;
         align-items: center;
 
-        padding: 0 15px;
+        padding: 0 17px;
 
-        font-size: 1.3rem;
-        font-weight: 300;
-        text-shadow: 1px 1px rgba(50,50,50,0.3);
+        font-size: 1.25rem;
+        /*font-weight: 300;*/
+        text-shadow: 1px 1px rgba(20,20,20,0.4);
 
         text-decoration: none;
         color: #fff;
         transition: background-color cubic-bezier(.165, .84, .44, 1) .2s;
     }
-    .nav__logo:hover, .nav__logo:active,
-    .nav__link:hover, .nav__link:active {
+    .nav__logo:hover, .nav__logo:focus,
+    .nav__link:hover, .nav__link:focus {
         background-color: #0D7BFF;
         transition: none;
     }
 
 
 .page-head {
-    margin-top: 65px;
+    margin-top: 68px;
     margin-bottom: 10px;
 
     min-height: 140px;
@@ -91,7 +89,7 @@ html, body {
     .page-head__container {
         max-width: 960px;
         margin: 0 auto;
-        padding: 30px 20px;
+        padding: 31px 20px 30px 20px;
     }
 
     .page-head__heading {
@@ -128,6 +126,7 @@ html, body {
         }
         .nav__logo {
             margin-top: 4px;
+            margin-bottom: 4px;
             height: 78px;
         }
         .nav__options {
@@ -189,8 +188,8 @@ html, body {
             padding-top: 5px;
             padding-bottom: 5px;
         }
-        .nav__logo:hover, .nav__logo:active,
-        .nav__link:hover, .nav__link:active {
+        .nav__logo:hover, .nav__logo:focus,
+        .nav__link:hover, .nav__link:focus {
             background-color: initial;
         }
 
