@@ -7,7 +7,7 @@
   "description": "An NAU 2017-2018 capstone website",
   "icons": [
     {
-      "src": "assets/octodocs.png",
+      "src": "images/octodocs.png",
       "type": "image/png",
       "sizes": "192x192"
     }
