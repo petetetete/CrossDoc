@@ -22,8 +22,10 @@ html, body {
     color: #298cff;
     font-weight: 500;
 }
-.body-container a:hover {
+.body-container a:hover, .body-container a:focus {
     border-bottom: 1px solid #298cff;
+    background-color: rgba(42,140,255,0.1);
+    outline: none;
 }
 
 

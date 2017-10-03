@@ -40,7 +40,11 @@ function updateBackToTop() {
     }
 }
 
+// Save elements
 var backToTop = document.getElementById("js-backToTop");
 
+// Add appropriate event listeners
 window.addEventListener("scroll", updateBackToTop);
 backToTop.addEventListener("click", function() { scrollToTop(400) });
+
+updateBackToTop();
