@@ -14,7 +14,7 @@ html, body {
 /* Custom html element styling */
 .body-container p {
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .body-container a {
@@ -30,6 +30,7 @@ html, body {
 .nav {
     background-color: #298cff;
     position: fixed;
+    will-change: transform;
     top: 0;
     z-index: 100;
     width: 100%;
@@ -44,6 +45,7 @@ html, body {
     .nav__logo {
         padding: 5px 12px;
         height: 68px;
+        transition: background-color cubic-bezier(.165, .84, .44, 1) .2s;
     }
     .nav__logo-img {
         height: 100%;
@@ -74,7 +76,6 @@ html, body {
         padding: 0 17px;
 
         font-size: 1.25rem;
-        /*font-weight: 300;*/
         text-shadow: 1px 1px rgba(20,20,20,0.4);
 
         text-decoration: none;
@@ -93,7 +94,7 @@ html, body {
     margin-bottom: 10px;
 
     min-height: 140px;
-    background-color: #1e1e3c;
+    background-color: #191932;
 
     color: #fff;
     text-shadow: 1px 1px #000;
@@ -130,6 +131,47 @@ html, body {
 
     padding: 10px 20px;
 }
+
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    width: 55px;
+    height: 55px;
+    line-height: 40px;
+    color: #298cff;
+    font-size: 34px;
+    text-align: center;
+    border-radius: 50%;
+    will-change: transform;
+    border: 5px solid #298cff;
+    background-color: #191932;
+    box-shadow: 0 2px 6px rgba(60,60,60,.34);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+
+    transition: visiblity cubic-bezier(.165, .84, .44, 1) .2s,
+                box-shadow cubic-bezier(.165, .84, .44, 1) .2s,
+                opacity cubic-bezier(.165, .84, .44, 1) .2s;
+}
+.back-to-top::before {
+    content: "\f062";
+    font-family: FontAwesome;
+}
+.back-to-top.visible {
+    opacity: 0.45;
+    cursor: pointer;
+    pointer-events: initial;
+}
+.back-to-top.visible:hover {
+    transition: box-shadow cubic-bezier(.165, .84, .44, 1) .2s,
+                opacity 0s;
+    opacity: 1;
+    box-shadow: 0 4px 8px rgba(60,60,60,.34);
+
+}
+
 
 @media (max-width: 769px) {
 
@@ -229,4 +271,7 @@ html, body {
             font-size: 1.1rem;
         }
 
+    .back-to-top {
+        display: none;
+    }
 }
