@@ -4,7 +4,7 @@ html, body {
 
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     color: #333;
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 * {
@@ -35,22 +35,26 @@ html, body {
     will-change: transform;
     top: 0;
     z-index: 100;
+    height: 68px;
     width: 100%;
     box-shadow: 0 2px 2px rgba(0,0,0,.23);
 }
     .nav__container {
         display: flex;
+        height: inherit;
         max-width: 960px;
         margin: 0 auto;
     }
 
     .nav__logo {
         padding: 5px 12px;
-        height: 68px;
+        height: inherit;
+        display: block;
         transition: background-color cubic-bezier(.165, .84, .44, 1) .2s;
     }
     .nav__logo-img {
         height: 100%;
+        border: none;
     }
 
     .nav__overflow {
