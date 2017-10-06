@@ -183,6 +183,7 @@ html, body {
 
     .nav {
         position: relative;
+        height: auto;
     }
         .nav__container {
             flex-direction: column;
