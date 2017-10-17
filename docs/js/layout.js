@@ -25,7 +25,6 @@ function scrollToTop(duration) {
         if (window.pageYOffset === destinationOffsetToScroll) {
             return;
         }
-
         requestAnimationFrame(scroll);
     }
 
@@ -33,18 +32,24 @@ function scrollToTop(duration) {
 }
 
 function updateBackToTop() {
-    if (window.pageYOffset > 300) {
+    if (window.pageYOffset >= navOffset) {
         backToTop.classList.add("visible");
     } else {
         backToTop.classList.remove("visible");
     }
 }
 
+
 // Save elements
+var pageHead = document.getElementById("js-pageHead");
 var backToTop = document.getElementById("js-backToTop");
 
-// Add appropriate event listeners
-window.addEventListener("scroll", updateBackToTop);
-backToTop.addEventListener("click", function() { scrollToTop(400) });
+// Logic variables
+var navOffset = (pageHead) ? pageHead.offsetHeight : 200;
 
+// Add appropriate event listeners
+if (backToTop) backToTop.addEventListener("click", function() { scrollToTop(400) });
+window.addEventListener("scroll", updateBackToTop);
+
+// Initial execution
 updateBackToTop();

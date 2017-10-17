@@ -20,6 +20,8 @@
         <link rel="icon" type="image/png" href="images/octodocs-nocircle.png" />
     </head>
     <body>
+
+        <!-- Begin: layout elements that should be copied to each page -->
         <div class="nav">
             <div class="nav__container">
                 <a class="nav__logo" href="./">
@@ -48,14 +50,22 @@
             </div>
         </div>
 
-        <div class="page-head">
+        <!-- 
+            Modifiers:
+                page-head--large: Extends minimum height of heading
+         -->
+        <div class="page-head" id="js-pageHead">
             <div class="page-head__container">
                 <h2 class="page-head__heading">OctoDocs</h2>
                 <p class="page-head__paragraph">This is example text that describes the project or something about the website, and also contains many words for testing purposes.</p>
             </div>
         </div>
 
-        <div class="back-to-top" id="js-backToTop"></div>
+        <button class="back-to-top" id="js-backToTop" aria-label="Scroll back to top of page">
+            <!-- <span class="up-arrow"></span> -->
+        </button>
+        <!-- End: layout elements that should be copied to each page -->
+
 
         <div class="body-container">
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -96,11 +106,14 @@
             proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                 </div>
             </div>
+        </div>
 
-            <div class="image">
-                <img class="image__elem" src="images/octodocs-nocircle.web.svg" />
-                <span class="image__descr">Example subtitle</span>
-            </div>
+        <div class="image">
+            <img class="image__elem" src="https://i.ytimg.com/vi/yaqe1qesQ8c/maxresdefault.jpg" />
+            <span class="image__descr">Example subtitle</span>
+        </div>
+
+        <div class="body-container"
 
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
             tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,

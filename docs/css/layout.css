@@ -101,12 +101,17 @@ html, body {
 
     min-height: 140px;
     background-color: #191932;
+    background-size: cover;
+    background-blend-mode: overlay;
 
     color: #fff;
     text-shadow: 1px 1px #000;
 
     border-bottom: 5px solid #298cff;
     box-shadow: 0 1px 0 rgba(12,13,14,0.1), 0 1px 3px rgba(12,13,14,0.1), 0 4px 20px rgba(12,13,14,0.035), 0 1px 1px rgba(12,13,14,0.025);
+}
+.page-head--large {
+    min-height: 320px;
 }
     .page-head__container {
         max-width: 960px;
@@ -133,25 +138,24 @@ html, body {
     max-width: 960px;
     margin: 0 auto;
 
-    line-height: 24px;
+    line-height: 26px;
 
     padding: 10px 20px;
 }
 
 .back-to-top {
     position: fixed;
+    outline: none;
     bottom: 30px;
     right: 20px;
-    width: 55px;
-    height: 55px;
-    line-height: 40px;
+    width: 53px;
+    height: 53px;
     color: #298cff;
-    font-size: 34px;
     text-align: center;
     border-radius: 50%;
     will-change: transform;
-    border: 5px solid #298cff;
-    background-color: #191932;
+    border: 3px solid #298cff;
+    background-color: #fff;
     box-shadow: 0 2px 6px rgba(60,60,60,.34);
     z-index: 100;
     opacity: 0;
@@ -164,6 +168,8 @@ html, body {
 .back-to-top::before {
     content: "\f062";
     font-family: FontAwesome;
+    font-size: 32px;
+    line-height: 24px;
 }
 .back-to-top.visible {
     opacity: 0.45;
@@ -175,9 +181,7 @@ html, body {
                 opacity 0s;
     opacity: 1;
     box-shadow: 0 4px 8px rgba(60,60,60,.34);
-
 }
-
 
 @media (max-width: 769px) {
 
@@ -207,12 +211,13 @@ html, body {
             margin-bottom: 5px;
             margin-left: 0;
             overflow: hidden;
+            padding: 0 4px;
         }
         /* Fade options to blue on mobile */
         .nav__overflow::before {
             content: "";
             position: absolute;
-            top: 0; left: 0;
+            top: 0; left: 4px;
 
             height: 100%;
             width: 13px;
@@ -231,7 +236,7 @@ html, body {
         .nav__overflow::after {
             content: "";
             position: absolute;
-            top: 0; right: 0;
+            top: 0; right: 4px;
 
             height: 100%;
             width: 13px;
