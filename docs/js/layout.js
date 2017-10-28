@@ -47,9 +47,13 @@ var backToTop = document.getElementById("js-backToTop");
 // Logic variables
 var navOffset = (pageHead) ? pageHead.offsetHeight : 200;
 
-// Add appropriate event listeners
-if (backToTop) backToTop.addEventListener("click", function() { scrollToTop(400) });
-window.addEventListener("scroll", updateBackToTop);
+if (backToTop) {
+    
+    // Add appropriate event listeners
+    backToTop.addEventListener("click", function() { scrollToTop(400) });
+    window.addEventListener("scroll", updateBackToTop);
 
-// Initial execution
-updateBackToTop();
+    // Initial execution
+    updateBackToTop();
+}
+
