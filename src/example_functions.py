@@ -1,10 +1,10 @@
 # Example functions that are basically called by the end-user in the CLI
 
 def generateAnchor():
-  print("Generated key here...")
+  print("Generated anchor will go here...")
   return
 
 def fetchComment(anchor):
   print("Provided anchor:", anchor)
-  print("Fetched comment here...")
+  print("Fetched comment will go here...")
   return

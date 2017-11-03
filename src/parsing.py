@@ -14,7 +14,8 @@ import os
 #
 commands = [{
   "identifiers": ["generate-anchor", "ga", "g"],
-  "function": generateAnchor
+  "function": generateAnchor,
+  "usage": "${identifier}"
 },
 {
   "identifiers": ["fetch-comment", "fc", "f"],
