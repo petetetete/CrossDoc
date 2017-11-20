@@ -91,7 +91,7 @@
 
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
-        border-bottom: 0px solid transparent;
+        border-bottom: 0px solid #298cff;
 
         transition: height ease-in-out .2s, border-bottom ease-in-out .2s;
     }
