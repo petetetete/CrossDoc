@@ -3,7 +3,7 @@
     align-items: center;
     flex-direction: column;
 
-    margin: 10px 0 35px 0;
+    margin: 25px 0;
 
     background-color: #191932;
     height: 60vh;
@@ -35,7 +35,7 @@
         text-align: center;
         font-size: 1.4rem;
         font-weight: 300;
-        background-color: rgba(25, 25, 50, 0.85);
+        background-color: rgba(25, 25, 50, 0.5);
     }
     .image--small > .image__descr {
         width: 40vh;
@@ -143,6 +143,7 @@
             bottom: 0;
             border-top-right-radius: 3px;
             width: auto !important;
+            background-color: rgba(25, 25, 50, 0.85);
         }
 }
 

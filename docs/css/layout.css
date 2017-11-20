@@ -21,6 +21,9 @@ html, body {
     margin-top: 0;
     margin-bottom: 25px;
 }
+.body-container p:last-child{
+    margin-bottom: 0;
+}
 
 .body-container a {
     text-decoration: none;
@@ -149,7 +152,7 @@ html, body {
 
 .body-container {
     max-width: 960px;
-    margin: 0 auto;
+    margin: 0 auto 25px auto;
 
     line-height: 28px;
     font-size: 1.1em;
