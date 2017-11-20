@@ -12,6 +12,11 @@ html, body {
 }
 
 /* Custom html element styling */
+.body-container h2, .body-container h1 {
+    margin-bottom: 1rem;
+    font-weight: 300;
+    line-height: 1.1;
+}
 .body-container p {
     margin-top: 0;
     margin-bottom: 25px;
