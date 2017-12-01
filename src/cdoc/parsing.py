@@ -1,8 +1,10 @@
-# Imports
-from example_functions import generateAnchor, fetchComment
+# Python Standard Library imports
+import os
 from inspect import signature
 from difflib import SequenceMatcher
-import os
+
+# Our module imports
+from cdoc.example_functions import generateAnchor, fetchComment
 
 
 # TODO: Consider moving this to its own file, command_registration.py (?)
@@ -22,7 +24,6 @@ commands = [{
   "function": fetchComment,
   "usage": "${identifier} <commentId>"
 }]
-
 
 
 # Used to determine if two strings are similar
