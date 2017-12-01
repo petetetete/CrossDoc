@@ -1,2 +1,2 @@
-# CrossDoc - OctoDocs
+# CrossDoc
 [TODO]
