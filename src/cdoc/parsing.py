@@ -4,26 +4,7 @@ from inspect import signature
 from difflib import SequenceMatcher
 
 # Our module imports
-from cdoc.example_functions import generateAnchor, fetchComment
-
-
-# TODO: Consider moving this to its own file, command_registration.py (?)
-# Array of registered command functions (make sure to import them to this file)
-# The "primary" identifier should be placed first in the list
-#
-# Usage message delimeters:
-#   ${identifier} -> will be replaced with the user-entered identifier
-#
-commands = [{
-  "identifiers": ["generate-anchor", "ga", "g"],
-  "function": generateAnchor,
-  "usage": "${identifier}"
-},
-{
-  "identifiers": ["fetch-comment", "fc", "f"],
-  "function": fetchComment,
-  "usage": "${identifier} <commentId>"
-}]
+from cdoc.registered_commands import registeredCommands
 
 
 # Used to determine if two strings are similar
@@ -37,7 +18,7 @@ def isSimilar(a, b):
 def findSimilarIds(id):
 
   similarIds = []
-  for command in commands:
+  for command in registeredCommands:
     newId = next((i for i in command["identifiers"] if isSimilar(i, id)), None)
     if (newId != None):
       mainId = command["identifiers"][0]
@@ -57,7 +38,8 @@ def processCommand(argv):
   identifier = argv[1]
 
   # Find command requested in big list and run its associated function
-  command = next((x for x in commands if identifier in x["identifiers"]), None)
+  command = next(
+    (x for x in registeredCommands if identifier in x["identifiers"]), None)
 
   # In the case we found a matching command
   if command != None:
@@ -75,7 +57,7 @@ def processCommand(argv):
       command["function"](*remainingArgs[:commandNumArgs])
     else:
 
-      if ("usage" in command): # Print the commands help text (if it exists)
+      if ("usage" in command): # Print the command's help text (if it exists)
         message = command["usage"].replace("${identifier}", identifier)
         print("usage:", message)
       else:
