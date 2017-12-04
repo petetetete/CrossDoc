@@ -2,11 +2,12 @@
 import sys
 
 # Our module imports
-from cdoc.parsing import processCommand
+from .parsing import processCommand
 
 
 def main():
   processCommand(sys.argv)
+
 
 if __name__ == '__main__':
   main()
