@@ -65,6 +65,7 @@
     border-top-color: #FFA516;
 }
     .contact__img {
+    	display: block;
         width: 100%;
         height: 100%;
 
@@ -154,7 +155,12 @@
     }
 
     .contact {
+    	margin-left: 0;
+    	margin-right: 0;
         margin-bottom: 20px;
     }
+    .contact:last-child {
+		margin-bottom: 0;
+	}
 
 }
