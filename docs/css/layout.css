@@ -15,7 +15,7 @@ html, body {
 .body-container h2, .body-container h1 {
     margin-bottom: 1rem;
     font-weight: 300;
-    line-height: 1.2;
+    line-height: 1.25;
 }
 .body-container p {
     margin-top: 0;
@@ -29,12 +29,17 @@ html, body {
     text-decoration: none;
     color: #298cff;
     font-weight: 500;
+    border-bottom: 1px solid transparent;
+    
+    transition: background-color cubic-bezier(.165, .84, .44, 1) .2s,
+				border-bottom cubic-bezier(.165, .84, .44, 1) .2s;
 }
-.body-container a:hover, .body-container a:focus {
-    border-bottom: 1px solid #298cff;
-    background-color: rgba(42,140,255,0.1);
-    outline: none;
-}
+	.body-container a:hover, .body-container a:focus {
+	    border-bottom: 1px solid #298cff;
+	    background-color: rgba(42,140,255,0.1);
+	    outline: none;
+	    transition: none;
+	}
 
 
 .nav {
@@ -158,6 +163,16 @@ html, body {
     font-size: 1.1em;
 
     padding: 10px 20px;
+}
+
+.row {
+    display: flex;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.col {
+    padding: 0 15px;
 }
 
 .back-to-top {
