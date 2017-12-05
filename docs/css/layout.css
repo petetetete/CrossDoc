@@ -13,7 +13,7 @@ html, body {
 
 /* Custom html element styling */
 .body-container h2, .body-container h1 {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
     font-weight: 300;
     line-height: 1.25;
 }
