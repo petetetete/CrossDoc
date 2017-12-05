@@ -9,7 +9,7 @@ def read(fname):
 setup(name='cross-doc',
       version='0.0.1',
       description='A comment management system for the modern world',
-      long_description=read('README.md'),
+      long_description=read('README.rst'),
       author='Octo-Docs',
       author_email='ph289@nau.edu',
       license='MIT',
