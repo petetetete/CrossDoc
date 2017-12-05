@@ -32,3 +32,32 @@ One easy way to ensure this, is to use a linter for your editor of choice. For e
     ]
 }
 ```
+
+
+## Package Updating
+
+Steps to creating and uploading a Pip update:
+
+* Tag release: `git tag <x.y.z> -m <message>`
+* Push tag: `git push --tags origin master`
+* Setup distributions: `python setup.py sdist`
+* Upload to pypi.org: `twine upload dist/*`
+    * Upload to test.pypi.org: `twine upload --repository testpypi dist/*`
+
+These steps assume that a .pypirc has already been setup that matches the following pattern:
+
+```
+[distutils]
+index-servers =
+  pypi
+  testpypi
+
+[pypi]
+username=<username>
+password=<password>
+
+[testpypi]
+repository=https://test.pypi.org/legacy/
+username=<username>
+password=<password>
+```
