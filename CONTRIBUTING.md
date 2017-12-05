@@ -39,7 +39,7 @@ One easy way to ensure this, is to use a linter for your editor of choice. For e
 Steps to creating and uploading a Pip update:
 
 * Tag release: `git tag <x.y.z> -m <message>`
-* Push tag: `git push --tags origin master`
+* Push tag: `git push --tags`
 * Setup distributions: `python setup.py sdist`
 * Upload to pypi.org: `twine upload dist/*`
     * Upload to test.pypi.org: `twine upload --repository testpypi dist/*`
