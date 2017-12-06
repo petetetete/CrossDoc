@@ -57,7 +57,7 @@
         <div class="page-head" id="js-pageHead">
             <div class="page-head__container">
                 <h2 class="page-head__heading">CrossDoc</h2>
-                <p class="page-head__paragraph">The documentation management tool that re-defines how and when you can interact with your comments. With features such as comment classification and comment scope, you can expand the descriptive capabilities of your project's documentation.</p>
+                <p class="page-head__paragraph">The documentation management tool that re-defines how and when you can interact with your comments. Providing features such as comment classification and comment scope, you can expand the descriptive capabilities of your project's documentation.</p>
             </div>
         </div>
 
@@ -66,18 +66,33 @@
 
 
         <div class="body-container">
-            <p>Octo-Docs is a team that was formed with a goal to improve how software development groups create, edit, and interact with comments in their projects. The members of team Octo-Docs are Garrison Smith, Peter Huettl, and Kristopher Moore and we are working on creating a new documentation management system called CrossDoc. The project is sponsored by Dr. James Palmer, who first proposed that commenting, as a whole, is in need of an improvement.</p>
+            <h1>The Program</h1>
+            <p>CrossDoc is a command line tool and text-editor plugin that allows you to seperate your comments from your code. This separation means that CrossDoc can provide unique commenting features previously impossible. Features such as <a href="#a-classification">comment classification</a> and <a href="#a-scope">comment scope</a> support.</p>
 
-            <p>Software development teams currently face the problem that their documentation is highly dependent on their project’s codebase. This dependence results in documentation that is hard to view or edit externally, particularly by non-tech savvy individuals. The globalization of software development groups means that not all developers working on a particular codebase speak the same language, and when this is coupled with the fact that software development is one of the biggest modern industries, it becomes apparent why this is an issue. This is why many modern teams have groups dedicated to the localization of the work environment. Employees such as this are often not familiar with current commenting practices and have a hard time combing through the codebase to find the language to change. The longer this comment management time takes, the more time and money a team is using not developing their product.</p>
+            <p>CrossDoc is an open source project and is available on <a href="https://github.com/petetetete/CrossDoc">GitHub</a></p>
+
+            <h1 class="a-target" id="a-classification">Comment Classification</h1>
+            <p>Comment classification, or comment sets, is the grouping of similar comments so that developers can toggle through distinct comment sets. For example, a team may have a group of comments classified as <i>Newbie Notes</i> that includes verbose comments describing all aspects of the functions it encompasses. An experienced developer may be more interested in the classification labeled <i>Design Rationale</i> that includes comments describing why a function works as it does, rather than how.</p> 
         </div>
 
-        <div class="image image--small">
-            <img class="image__elem" src="assets/cdoc_example.jpg" />
-            <span class="image__descr">CrossDoc Example</span>
+        <div class="image image--small a-target" >
+            <img class="image__elem" src="assets/set_example.jpg" />
+            <span class="image__descr">Comment Classification Example</span>
         </div>
 
         <div class="body-container">
-            <p>Octo-Docs and Dr. Palmer aim to fix this with CrossDoc, a commenting system that connects external comment stores to a codebase. By simply referencing external comments, this new comment system will provide a great deal of flexibility and improvability to the standard commenting system. Improvements such as distinct comment categories, an adapting comment history, and user-specific comment modules will not only solve the initial commenting problem but also provide an adaptable canvas to solve future documentation issues. Dr. Palmer, as the Associate Director of Undergraduate Programs at NAU, is particularly interested in this product for its implications for teams and even individuals working on their own projects. As such, this technology works well in an educational environment, and the categorization of comments can be used to help beginners and experienced developers alike.</p>
+            <h1 class="a-target" id="a-scope">Comment Scope</h1>
+            <p>Comment scope is the ability to declare both a starting <b>and ending</b> point for a particular comment. In traditional commenting, a comment simply describes an arbitrary number of lines of code below the comment, but with CrossDoc, the addition of scope greatly broadens the expressive power of in-file comments.</p> 
+        </div>
+
+        <div class="image image--small a-target" >
+            <img class="image__elem" src="assets/scope_example.png" />
+            <span class="image__descr">Comment Scope Example</span>
+        </div>
+
+        <div class="body-container">
+            <h1>Many Other Features</h1>
+            <p>An in-depth analysis of CrossDoc, and the product it aims to be, is available on the <a href="documents.html">documents page</a>. Here you can find the most recent copy of our <a href="deliverables/Requirements Specification v1.pdf">requirements document</a> alongside other project and team documents.</p> 
         </div>
 
 

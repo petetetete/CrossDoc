@@ -317,12 +317,9 @@
         overflow: hidden;
     }
         .image__descr {
+            position: relative;
             transform: none;
-            top: auto;
-            bottom: 0;
-            border-top-right-radius: 3px;
             width: auto !important;
-            background-color: rgba(25, 25, 50, 0.85);
         }
 }
 

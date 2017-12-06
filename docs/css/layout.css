@@ -51,6 +51,19 @@ html, body {
     color: #d9534f;
 }
 
+.a-target::before
+{
+    display: block;
+    visibility: hidden;
+
+    height: 74px;
+    margin-top: -74px;
+    
+    content: ' ';
+
+    pointer-events: none;
+}
+
 
 .nav {
     background-color: #298cff;
@@ -336,4 +349,11 @@ html, body {
     .back-to-top {
         display: none;
     }
+
+    .a-target::before
+    {
+        height: 10px;
+        margin-top: -10px;
+    }
+
 }
