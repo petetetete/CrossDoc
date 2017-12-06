@@ -43,6 +43,7 @@ function updateBackToTop() {
 // Save elements
 var pageHead = document.getElementById("js-pageHead");
 var backToTop = document.getElementById("js-backToTop");
+var copyrightYear = document.getElementById("js-copyYear");
 
 // Logic variables
 var navOffset = (pageHead) ? pageHead.offsetHeight : 200;
@@ -57,3 +58,5 @@ if (backToTop) {
     updateBackToTop();
 }
 
+if (copyrightYear)
+    copyrightYear.innerText = new Date().getFullYear();

@@ -29,7 +29,7 @@ function populateFiles(container, files) {
         viewButton.className = "file__button";
         viewButton.href = "#";
         viewButton.title = "View document in-line";
-        viewButton.innerHTML = "<span class='fa fa-eye'></span>";
+        viewButton.innerHTML = "<span class='fa fa-eye file__open'></span><span class='fa fa-eye-slash file__close'></span>";
         viewButton.onclick = function(e) {
             e.preventDefault();
             file.classList.toggle("file--open");

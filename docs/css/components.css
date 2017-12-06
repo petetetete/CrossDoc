@@ -175,6 +175,9 @@
     .file__versions {
     
     }
+        .file__versions > a {
+            margin-right: 10px;
+        }
     .file__button {
         display: inline-flex;
         align-items: center;
@@ -190,6 +193,15 @@
         }
         a.file__button:hover, a.file__button:focus {
             border-bottom: none;
+        }
+        .file__button > .file__close {
+            display: none;
+        }
+        .file--open .file__button > .file__close {
+            display: block;
+        }
+        .file--open .file__button > .file__open {
+            display: none;
         }
 
 
