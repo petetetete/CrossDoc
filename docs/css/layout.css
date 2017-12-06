@@ -183,6 +183,8 @@ html, body {
 
 .col {
     padding: 0 10px;
+    flex: 1;
+    overflow: hidden;
 }
 
 .back-to-top {
