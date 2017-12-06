@@ -23,7 +23,7 @@ eternal to ``CrossDoc``, be sure to locally install the package through
 pip with the following command (**Important:** Make sure you are in the ``CrossDoc``
 directory before doing this):
 
-``pip install .``
+``pip install .`` or ``pip install . --upgrade`` to reinstall
 
 
 Code Formatting

@@ -1,6 +1,5 @@
 # Our module imports
-from .example_commands import generateAnchor, fetchComment
-from .commands import projectInit
+from .commands import projectInit, createComment
 
 # Array of registered command functions (make sure to import them to this file)
 # The "primary" identifier should be placed first in the list
@@ -13,11 +12,7 @@ registeredCommands = [{
   "function": projectInit,
   "usage": "${identifier}"
 }, {
-  "identifiers": ["generate-anchor", "ga", "g"],
-  "function": generateAnchor,
+  "identifiers": ["create-comment", "cc", "c"],
+  "function": createComment,
   "usage": "${identifier}"
-}, {
-  "identifiers": ["fetch-comment", "fc", "f"],
-  "function": fetchComment,
-  "usage": "${identifier} <commentId>"
 }]
