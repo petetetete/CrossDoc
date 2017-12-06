@@ -2,6 +2,7 @@ function populateFiles(container, files) {
     if (!container || !files)
         return;
 
+    container.innerHTML = "";
     files.forEach((f, i) => {
 
         // Construct the elements in javascript to encapsulate opening logic
@@ -51,6 +52,10 @@ function populateFiles(container, files) {
         iframe.type = "application/pdf";
         iframe.innerText = "This browser does not support PDFs viewers."
 
+        // Asynchronously set the data to improve inital load time
+        setTimeout(() => iframe.data = "deliverables/"
+         + f.versions[f.versions.length - 1] + ".pdf", 0);
+
         // Create structure
         viewer.appendChild(iframe);
         info.appendChild(title);
@@ -65,16 +70,18 @@ function populateFiles(container, files) {
     });
 }
 
+
 // "Main" scope
+
 var documents = [{
         title: "Requirements Specification",
         versions: ["Requirements Specification v1"]
     }, {
-        title: "Team Inventory",
-        versions: ["Team Inventory"]
-    }, {
         title: "Technological Feasibility Analysis",
         versions: ["Technological Feasibility Analysis"]
+    }, {
+        title: "Team Inventory",
+        versions: ["Team Inventory"]
     }];
 
 var presentations = [{

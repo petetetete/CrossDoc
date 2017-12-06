@@ -3,7 +3,7 @@ html, body {
     margin: 0;
 
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: #eee;
+    background-color: #f1f1f1;
     color: #111;
     font-size: 1rem;
 }
@@ -12,8 +12,13 @@ html, body {
     box-sizing: border-box;
 }
 
-/* Custom html element styling */
-.body-container h2, .body-container h1 {
+/* Typography helpers */
+.body-container h1 {
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+    line-height: 1.25;
+}
+.body-container h2 {
     margin-bottom: 1.25rem;
     font-weight: 300;
     line-height: 1.25;
@@ -41,6 +46,10 @@ html, body {
         outline: none;
         transition: none;
     }
+
+.error-text {
+    color: #d9534f;
+}
 
 
 .nav {
@@ -168,12 +177,12 @@ html, body {
 
 .row {
     display: flex;
-    margin-left: -15px;
-    margin-right: -15px;
+    margin-left: -10px;
+    margin-right: -10px;
 }
 
 .col {
-    padding: 0 15px;
+    padding: 0 10px;
 }
 
 .back-to-top {

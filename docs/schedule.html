@@ -57,7 +57,7 @@
         <div class="page-head" id="js-pageHead">
             <div class="page-head__container">
                 <h2 class="page-head__heading">Schedule</h2>
-                <p class="page-head__paragraph">Find project progress updates, projected deadlines, and future project plans here.</p>
+                <p class="page-head__paragraph">Find project progress update posts and a live list of our project releases. New Posts will be created at developmental milestones and may correspond with big project releases.</p>
             </div>
         </div>
 
@@ -66,9 +66,19 @@
 
 
         <div class="body-container">
-            <h2>Project Updates</h2>
-            
+            <h1>Project Updates</h1>
+            <div id="js-updates" class="posts">
+                <i>Loading updates...</i> <!-- Populated by JavaScript (schedule.js) -->
+            </div>
+
+            <h1>Project Releases</h1>
+            <p>All release data pulled from the project's <a href="https://github.com/petetetete/CrossDoc">GitHub Page</a>. Additional release data available on the <a href="https://pypi.org/project/cross-doc/">PyPi project page</a>.</p>
+            <ul id="js-releases">
+                <i>Loading releases...</i> Populated by JavaScript (schedule.js)
+            </ul>
         </div>
+
+        <script src="js/schedule.js"></script>
 
 
         <!-- Load resources after DOM has loaded -->
