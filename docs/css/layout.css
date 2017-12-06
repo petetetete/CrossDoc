@@ -32,14 +32,14 @@ html, body {
     border-bottom: 1px solid transparent;
     
     transition: background-color cubic-bezier(.165, .84, .44, 1) .2s,
-				border-bottom cubic-bezier(.165, .84, .44, 1) .2s;
+                border-bottom cubic-bezier(.165, .84, .44, 1) .2s;
 }
-	.body-container a:hover, .body-container a:focus {
-	    border-bottom: 1px solid #298cff;
-	    background-color: rgba(42,140,255,0.1);
-	    outline: none;
-	    transition: none;
-	}
+    .body-container a:hover, .body-container a:focus {
+        border-bottom: 1px solid #298cff;
+        background-color: rgba(42,140,255,0.1);
+        outline: none;
+        transition: none;
+    }
 
 
 .nav {

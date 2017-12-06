@@ -64,51 +64,19 @@
         <button class="back-to-top" id="js-backToTop" aria-label="Scroll back to top of page"></button>
         <!-- End: layout elements that should be copied to each page -->
 
-		
+        
         <div class="body-container">
         
-        	<h2>Project Deliverables</h2>
-        	
-        	<div class="file">
-        		<div class="file__head">
-        			<div class="file__info">
-						<h2 class="file__title">Team Inventory</h2>
-						<div calss="file__versions"><a href="deliverables/Team Inventory.pdf">v1</a></div>
-					</div>
-					<a href="deliverables/Team Inventory.pdf" class="file__button" title="View"><span class="fa fa-search"></span></a>
-					<a href="deliverables/Team Inventory.pdf" class="file__button" title="Download" download><span class="fa fa-download"></span></a>
-        		</div>
-				<object class="file__viewer" data="deliverables/Team Inventory.pdf" type="application/pdf">
-					This browser does not support PDFs viewers.
-				</object>
-			</div>
-			
-			<div class="file">
-				<div class="file__head">
-					<div class="file__info">
-						<h2 class="file__title">Technological Feasibility Analysis</h2>
-						<div calss="file__versions"><a href="deliverables/Technological Feasibility Analysis.pdf">v1</a></div>
-					</div>
-					<a href="deliverables/Technological Feasibility Analysis.pdf" class="file__button" title="View"><span class="fa fa-search"></span></a>
-					<a href="deliverables/Technological Feasibility Analysis.pdf" class="file__button" title="Download" download><span class="fa fa-download"></span></a>
-				</div>
-			</div>
-			
-			<div class="file">
-				<div class="file__head">
-					<div class="file__info">
-						<h2 class="file__title">Requirements Specification</h2>
-						<div calss="file__versions"><a href="deliverables/Requirements Specification v1.pdf">v1</a></div>
-					</div>
-					<a href="deliverables/Requirements Specification v1.pdf" class="file__button" title="View"><span class="fa fa-search"></span></a>
-					<a href="deliverables/Requirements Specification v1.pdf" class="file__button" title="Download" download><span class="fa fa-download"></span></a>
-				</div>
-			</div>
+            <h2>Project Deliverables</h2>
+            
+            <!-- Populated by JavaScript (file_viewer.js) -->
+            <div id="js-files"></div>
         </div>
 
+        <script src="js/file_viewer.js"></script>
 
         <!-- Load resources after DOM has loaded -->
         <link href="libs/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-        <script src="js/layout.js" async></script>
+        <script src="js/layout.js"></script>
     </body>
 </html>
