@@ -2,6 +2,26 @@ function populateReleases(container, url) {
     if (!container || !url)
         return;
 
+    // Used to actually populate the HTML into the dom
+    function populateDom(releases) {
+        container.innerHTML = releases.map(release => 
+            `<li><b>v${release.name}</b> - at commit <i>${release.commit.sha.substring(0, 6)}</i></li>`
+            ).join("");
+    }
+
+    // If we've already made this request recently
+    var EXPIRATION_TIME = 3600000;
+    var releases = localStorage["releases"];
+    if (releases) {
+        releases = JSON.parse(releases);
+
+        if (new Date().getTime() - releases.date < EXPIRATION_TIME) {
+            populateDom(releases.data);
+            return;
+        }
+    }
+
+    // Else get data from GitHub
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url);
     xhr.onload = function() {
@@ -11,10 +31,8 @@ function populateReleases(container, url) {
             return;
         }
 
-        var releases = JSON.parse(xhr.responseText);
-        container.innerHTML = releases.map(release => 
-            `<li><b>v${release.name}</b> - at commit <i>${release.commit.sha.substring(0, 6)}</i></li>`
-            ).join("");
+        localStorage["releases"] = `{"date":"${new Date().getTime()}","data":${xhr.responseText}}`;
+        populateDom(JSON.parse(xhr.responseText));
     };
 
     xhr.send();
