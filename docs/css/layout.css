@@ -265,6 +265,7 @@ html, body {
             width: 13px;
 
             border-left: 4px solid #298cff;
+            pointer-events: none;
 
             background: rgba(41,141,255,1);
             background: -moz-linear-gradient(left, rgba(41,141,255,1) 0%, rgba(41,140,255,0) 100%);
@@ -284,6 +285,7 @@ html, body {
             width: 13px;
 
             border-right: 4px solid #298cff;
+            pointer-events: none;
 
             background: rgba(41,141,255,0);
             background: -moz-linear-gradient(left, rgba(41,141,255,0) 0%, rgba(41,140,255,1) 100%);
@@ -297,8 +299,7 @@ html, body {
 
         .nav__link {
             font-size: 1.25rem;
-            padding-top: 5px;
-            padding-bottom: 5px;
+            padding: 5px 15px;
         }
         .nav__logo:hover, .nav__logo:focus,
         .nav__link:hover, .nav__link:focus {
