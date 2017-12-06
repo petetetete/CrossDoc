@@ -1,20 +1,6 @@
-var fileContainer = document.getElementById("js-files");
-var files = [
-    {
-        title: "Requirements Specification",
-        versions: ["Requirements Specification v1"]
-    },
-    {
-        title: "Team Inventory",
-        versions: ["Team Inventory"]
-    },
-    {
-        title: "Technological Feasibility Analysis",
-        versions: ["Technological Feasibility Analysis"]
-    }
-]
-
-if (fileContainer) {
+function populateFiles(container, files) {
+    if (!container || !files)
+        return;
 
     files.forEach((f, i) => {
 
@@ -28,14 +14,15 @@ if (fileContainer) {
         var info = document.createElement("div");
         info.className = "file__info";
 
-        var title = document.createElement("h2");
+        var title = document.createElement("div");
         title.className = "file__title";
         title.innerText = f.title;
 
         var versions = document.createElement("div");
         versions.className = "file__versions";
         versions.innerHTML = f.versions.map((v, i) => 
-            "<a href='deliverables/" + v + ".pdf' title='View version'>v" + (i + 1) + "</a>");
+            "<a href='deliverables/" + v + ".pdf' title='View version'>v"
+             + (i + 1) + "</a>");
 
         var viewButton = document.createElement("a");
         viewButton.className = "file__button";
@@ -49,7 +36,8 @@ if (fileContainer) {
 
         var downloadButton = document.createElement("a");
         downloadButton.className = "file__button";
-        downloadButton.href = "deliverables/" + f.versions[f.versions.length - 1] + ".pdf";
+        downloadButton.href = "deliverables/"
+         + f.versions[f.versions.length - 1] + ".pdf";
         downloadButton.title = "Download document";
         downloadButton.innerHTML = "<span class='fa fa-download'></span>";
 
@@ -58,7 +46,8 @@ if (fileContainer) {
 
         var iframe = document.createElement("object");
         iframe.className = "file__iframe";
-        iframe.data = "deliverables/" + f.versions[f.versions.length - 1] + ".pdf";
+        iframe.data = "deliverables/"
+         + f.versions[f.versions.length - 1] + ".pdf";
         iframe.type = "application/pdf";
         iframe.innerText = "This browser does not support PDFs viewers."
 
@@ -72,30 +61,27 @@ if (fileContainer) {
         file.appendChild(head);
         file.appendChild(viewer);
 
-        fileContainer.appendChild(file)
-
-
-        /*return "\
-        <div class='file'>\
-            <div class='file__head'>\
-                <div class='file__info'>\
-                    <h2 class='file__title'>" + file.title + "</h2>\
-                    <div class='file__versions'>\
-                        " + file.versions.map((v, i) => "<a href='deliverables/" + v + ".pdf'>v" + (i + 1) + "</a>") + "\
-                    </div>\
-                </div>\
-                <a class='file__button' href='deliverables/" + file.versions[file.versions.length - 1] + ".pdf' title='View' data-opens='js-" + i + "'>\
-                    <span class='fa fa-eye'></span>\
-                    </a>\
-                <a class='file__button' href='deliverables/" + file.versions[file.versions.length - 1] + ".pdf' title='Download' download>\
-                    <span class='fa fa-download'></span>\
-                </a>\
-            </div>\
-            <div class='file__viewer'>\
-                <object class='file__iframe' data='deliverables/" + file.versions[file.versions.length - 1] + ".pdf' type='application/pdf'>\
-                    This browser does not support PDFs viewers.\
-                </object>\
-            </div>\
-        </div>"*/
+        container.appendChild(file)
     });
 }
+
+// "Main" scope
+var documents = [{
+        title: "Requirements Specification",
+        versions: ["Requirements Specification v1"]
+    }, {
+        title: "Team Inventory",
+        versions: ["Team Inventory"]
+    }, {
+        title: "Technological Feasibility Analysis",
+        versions: ["Technological Feasibility Analysis"]
+    }];
+
+var presentations = [{
+        title: "Design Review #1",
+        versions: ["Design Review 1"]
+    }];
+
+// Populate file containers
+populateFiles(document.getElementById("js-documents"), documents);
+populateFiles(document.getElementById("js-presentations"), presentations);
