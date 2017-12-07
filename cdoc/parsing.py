@@ -3,72 +3,50 @@ from inspect import signature, Parameter
 from difflib import SequenceMatcher
 
 # Our module imports
-from .registered_commands import registeredCommands
+import cdoc.registration
 from .logging import logger
 
-
-# Used to determine if two strings are similar
-def isSimilar(a, b):
-  return SequenceMatcher(None, a, b).ratio() >= 0.5
-
-
-# Returns a list of tuples in which the first element is the command that
-# is similar to the input, and the second element is the primary identifier
-# of the command.
-def findSimilarIds(id):
-
-  similarIds = []
-  for command in registeredCommands:
-    newId = next((i for i in command["identifiers"] if isSimilar(i, id)), None)
-    if (newId is not None):
-      mainId = command["identifiers"][0]
-      similarIds.append([newId, mainId if newId != mainId else None])
-
-  return similarIds
-
-
-def outputSimilarCommands(identifier):
-  output = "'" + identifier + "' is not a command."
-
-  # If there are any similar commands, add them to the output string
-  similarIds = findSimilarIds(identifier)
-  if (len(similarIds) > 0):
-    output += "\nSimilar commands:"
-
-    for id in similarIds[:3]:  # Only add up to 3 similar commands
-      output += "\n  " + id[0]
-      if (id[1] is not None):  # Append command main id (if it is necessary)
-        output += " (" + id[1] + ")"
-
-  logger.program(output)
+HELP_FLAGS = ["--h", "--help"]
 
 
 # Processes the command line input and runs the appropriate function
 def processCommand(argv):
 
+  # They didn't give us anything
   if len(argv) == 1:
-    # TODO: Create usage message system
-    logger.program("missing command")
+    logger.usage()
     return
 
   identifier = argv[1]
 
+  # They're looking for program level help text
+  if len(argv) == 2 and identifier in HELP_FLAGS:
+    logger.usage()
+    return
+
   # Find command requested in big list and run its associated function
-  command = next((x for x in registeredCommands
-                  if identifier in x["identifiers"]), None)
+  command = next((a for a in cdoc.registration.commands
+                  if identifier in signature(a).return_annotation.split()),
+                 None)
 
   # No valid command was found, let's provide a helpful message
   if command is None:
     outputSimilarCommands(identifier)
     return
 
+  args = argv[2:]  # Remaining relevant arguments
+
+  # Print help text for the command if they've given us only a help flag
+  if len(args) == 1 and args[0] in HELP_FLAGS:
+    logger.usage(command)
+    return
+
   # Get command line argument information
   argsMap = {}
-  args = argv[2:]
   for i in range(len(args)):
 
     # Skip past args that aren't a parameter (for now)
-    if args[i][0] != '-':
+    if args[i][0] != '-' or args[i] in argsMap:
       continue
 
     # Initialize map element
@@ -79,24 +57,22 @@ def processCommand(argv):
       currList.append(args[i])  # Append parameter to current list
 
   finalParams = []
-  requiredParams = signature(command["function"]).parameters
+  requiredParams = signature(command).parameters.items()
 
-  for name, param in requiredParams.items():
+  # Iterate through the command's parameters
+  for name, param in requiredParams:
     required = param.default == Parameter.empty
     possibleArgs = param.annotation.split()
 
     matchingArg = next((b for a, b in argsMap.items()
                         if a in possibleArgs), None)
 
-    # TODO: Consider adding support for required array parameters
-    # Currently, the options are 1 required, 1 not required, and * not required
-
     # Parameter is required
     if required:
       # Case where the user has not provided ample info
       if matchingArg is None or matchingArg == []:
-        # TODO: Replace with usage message
-        logger.fatal("oops, they missed a param")
+        logger.usage(command)
+        return
       else:
         finalParams.append(matchingArg[0])
 
@@ -118,4 +94,41 @@ def processCommand(argv):
       finalParams.append(param.default)
 
   # Call the actual function with the users provided info
-  command["function"](*finalParams)
+  command(*finalParams)
+
+
+# Used to determine if two strings are similar
+def isSimilar(a, b):
+  return SequenceMatcher(None, a, b).ratio() >= 0.5
+
+
+# Returns a list of tuples in which the first element is the command that
+# is similar to the input, and the second element is the primary identifier
+# of the command.
+def findSimilarIds(id):
+
+  similarIds = []
+  for command in cdoc.registration.commands:
+    identifiers = signature(command).return_annotation.split()
+    newId = next((i for i in identifiers if isSimilar(i, id)), None)
+    if (newId is not None):
+      mainId = identifiers[0]
+      similarIds.append([newId, mainId if newId != mainId else None])
+
+  return similarIds
+
+
+def outputSimilarCommands(identifier):
+  output = "'" + identifier + "' is not a command."
+
+  # If there are any similar commands, add them to the output string
+  similarIds = findSimilarIds(identifier)
+  if (len(similarIds) > 0):
+    output += "\n\nSimilar commands:"
+
+    for id in similarIds[:3]:  # Only add up to 3 similar commands
+      output += "\n  " + id[0]
+      if (id[1] is not None):  # Append command main id (if it is necessary)
+        output += " (" + id[1] + ")"
+
+  logger.program(output)

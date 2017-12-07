@@ -15,7 +15,7 @@ from .logging import logger
 
 
 def projectInit(name: "-name -n" = "Default Project Name",
-                stores: "-stores -s" = []):
+                stores: "-stores -s" = []) -> "init i":
 
   config = {
     "project_name": name,
@@ -33,7 +33,7 @@ def projectInit(name: "-name -n" = "Default Project Name",
 
 def createComment(text: "-text -t",
                   store: "-store -st" = "",  # TODO: Alias stores
-                  set: "-set" = ""):
+                  set: "-set" = "") -> "create-comment cc c":
 
   # TODO: Move somwhere better
   DEFAULT_SET = "No Set"
@@ -69,9 +69,7 @@ def createComment(text: "-text -t",
     with open(currStore + "/" + DEFAULT_SET + SET_EXTENSION, "a+") as file:
       # TODO: Replace with generateAnchor
       # TODO: Create better comment storage format (that's simple)
-      comment = "=====\n12345:\n" + text + "\n=====\n\n"
+      comment = "<&> 123456anchorhere123456\n" + text + "\n\n"
       file.write(comment)
-
-  print(currStore)
 
   return
