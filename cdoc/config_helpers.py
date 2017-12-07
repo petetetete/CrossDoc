@@ -7,6 +7,9 @@ from .logging import logger
 
 # Constants
 CONFIG_NAME = "cdoc-config.json"
+DEFAULT_SET = "No Set"
+SET_EXTENSION = ".txt"
+ANCHOR_HOOK = "<&> "
 
 
 def createConfig(data):
@@ -25,6 +28,8 @@ def createConfig(data):
 
 
 def getConfig():
+  """Trys to open the config file"""
+
   try:
     with open("cdoc-config.json", "r") as file:
       data = json.load(file)
@@ -33,3 +38,50 @@ def getConfig():
     logger.fatal("not in a CrossDoc project directory")
 
   return data
+
+
+def storeIsValid(store):
+  """Determine whether a given store is valid"""
+
+  return os.path.isdir(store)
+
+
+def findComment(anchor, store=None):
+  """Finds comment through stores or in a specific store
+
+  Raises:
+    ValueError: No matching comment found"""
+
+  config = getConfig()
+
+  for i, cStore in enumerate(config["stores"]):
+    if not storeIsValid(cStore) or store is not None and i != int(store):
+      continue
+
+    # Loop through all sets in the store
+    for file in os.listdir(os.fsencode(cStore)):
+      set = os.fsdecode(file)
+
+      # Skip files that are not sets
+      if not set.endswith(SET_EXTENSION):
+        continue
+
+      filePath = os.path.join(cStore, set)
+      with open(filePath) as file:
+
+        lines = file.readlines()
+        start = next((i for i, l in enumerate(lines)
+                      if l.strip("\n").replace(ANCHOR_HOOK, "") == anchor),
+                     None)
+
+        if start is not None:
+          end = next((i for i, l in enumerate(lines[start + 1:])
+                      if ANCHOR_HOOK in l),
+                     None)
+
+          if end is None:
+            return filePath, start, len(lines)
+          else:
+            return filePath, start, start + end + 1
+
+  raise ValueError("No matching comment found")

@@ -1,5 +1,5 @@
 # Our module imports
-from .commands import projectInit, createComment, generateAnchor
+from .commands import projectInit, createComment, generateAnchor, fetchComment
 
 # Array of registered command functions (make sure to import them to this file)
 # This registration API assumes that a command has:
@@ -7,4 +7,4 @@ from .commands import projectInit, createComment, generateAnchor
 #   parameter annotations -> denoting the aliases of each parameter
 #   parameter defaults -> denoting whether a param is required, and what type
 #                         of input should be provided (<list> or <value>)
-commands = [projectInit, createComment, generateAnchor]
+commands = [projectInit, createComment, generateAnchor, fetchComment]
