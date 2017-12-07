@@ -19,7 +19,7 @@ def createConfig(data):
     raise FileExistsError("Config file already exists")
 
   output = open(CONFIG_NAME, "w")
-  json.dump(data, output, indent=4, separators=(',', ': '))
+  json.dump(data, output, indent=4, separators=(',', ': '), sort_keys=True)
 
   return
 

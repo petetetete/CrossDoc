@@ -4,8 +4,8 @@ function populateReleases(container, url) {
 
     // Used to actually populate the HTML into the dom
     function populateDom(releases) {
-        container.innerHTML = releases.map(release => 
-            `<li><b>v${release.name}</b> - at commit <i>${release.commit.sha.substring(0, 6)}</i></li>`
+        container.innerHTML = releases.map(tag => 
+            `<li><b>v${tag.name}</b> <i>(commit ${tag.commit.sha.substring(0, 6)})</i>${tag.message ? " - " + tag.message : ""}</li>`
             ).join("");
     }
 

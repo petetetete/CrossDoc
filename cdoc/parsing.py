@@ -1,6 +1,7 @@
 # Python Standard Library imports
-from inspect import signature
+from inspect import signature, Parameter
 from difflib import SequenceMatcher
+from pprint import pprint
 
 # Our module imports
 from .registered_commands import registeredCommands
@@ -41,7 +42,6 @@ def outputSimilarCommands(identifier):
         output += " (" + id[1] + ")"
 
   logProgram(output)
-  return
 
 
 # Processes the command line input and runs the appropriate function
@@ -58,28 +58,65 @@ def processCommand(argv):
   command = next((x for x in registeredCommands
                   if identifier in x["identifiers"]), None)
 
-  # In the case we found a matching command
-  if command is not None:
-
-    remainingArgs = argv[2:]  # Remaining relevant arguments
-
-    commandSig = signature(command["function"])
-    commandNumArgs = len(commandSig.parameters)
-
-    # TODO: Handle defaulted arguments better
-    # TODO: Think of method to handle flags
-
-    # If the number of given arguments exceeds, just pass the needed ones
-    if (len(remainingArgs) >= commandNumArgs):
-      command["function"](*remainingArgs[:commandNumArgs])
-    else:
-
-      if ("usage" in command):  # Print the command's help text (if it exists)
-        message = command["usage"].replace("${identifier}", identifier)
-        logStandard("usage: " + message)
-      else:
-        logFatal("invalid number of arguments")
-
   # No valid command was found, let's provide a helpful message
-  else:
+  if command is None:
     outputSimilarCommands(identifier)
+    return
+
+  # Get command line argument information
+  argsMap = {}
+  args = argv[2:]
+  for i in range(len(args)):
+
+    # Skip past args that aren't a parameter (for now)
+    if args[i][0] != '-':
+      continue
+
+    # Initialize map element
+    currList = argsMap[args[i]] = []
+
+    while i + 1 < len(args) and args[i + 1][0] != '-':
+      i += 1  # Increment iterator
+      currList.append(args[i])  # Append parameter to current list
+
+  finalParams = []
+  requiredParams = signature(command["function"]).parameters
+
+  for name, param in requiredParams.items():
+    required = param.default == Parameter.empty
+    possibleArgs = param.annotation.split()
+
+    matchingArg = next((b for a, b in argsMap.items()
+                        if a in possibleArgs), None)
+
+    # TODO: Consider adding support for required array parameters
+    # Currently, the options are 1 required, 1 not required, and * not required
+
+    # Parameter is required
+    if required:
+      # Case where the user has not provided ample info
+      if matchingArg is None or matchingArg == []:
+        print("oops, they missed a param")
+        sys.exit()
+      else:
+        finalParams.append(matchingArg[0])
+
+    # Parameter is not required, and the user gave us something to work with
+    elif matchingArg is not None:
+
+      # Default expects many, pass along all the user gave us
+      if isinstance(param.default, list):
+        finalParams.append(matchingArg)
+
+      # Default expects a single, and they gave it to us, so pass it along
+      elif len(matchingArg) > 0:
+        finalParams.append(matchingArg[0])
+
+      else:  # User did not give us the requisite info
+        finalParams.append(param.default)
+
+    else:  # Parameter is not required and the user didn't give us anything
+      finalParams.append(param.default)
+
+  # Call the actual function with the users provided info
+  command["function"](*finalParams)

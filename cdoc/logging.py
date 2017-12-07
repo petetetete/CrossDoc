@@ -12,8 +12,7 @@ def logStandard(message):
 
 def logProgram(message):
   """Logs a message prefixed by the program name to the user"""
-
-  name = os.path.basename(__file__)
+  name = os.path.splitext(os.path.basename(sys.argv[0]))[0]
   print(name + ": " + message)
   return
 
