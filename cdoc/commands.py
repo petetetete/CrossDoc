@@ -3,7 +3,7 @@ from pprint import pprint
 
 # Our module imports
 from .config_helpers import *
-from .logging import *
+from .logging import logger
 
 # The parsing uses parameter annotations to match command line arguments
 # to the appropriate parameters (including aliases).
@@ -25,9 +25,9 @@ def projectInit(name: "-name -n" = "Default Project Name",
   try:
     createConfig(config)
   except FileExistsError:
-    logFatal("configuration file already exists")
+    logger.fatal("configuration file already exists")
 
-  logCommand(CONFIG_NAME + " initialized in this directory")
+  logger.standard(CONFIG_NAME + " initialized in this directory")
   return
 
 
@@ -36,14 +36,14 @@ def createComment(text: "-text -t",
                   set: "-set" = ""):
 
   # TODO: Move somwhere better
-  DEFAULT_SET_NAME = "No Set"
+  DEFAULT_SET = "No Set"
   SET_EXTENSION = ".txt"
 
   pprint(getConfig())
 
   config = getConfig()
   if len(config["stores"]) == 0:
-    logFatal("no comment stores to create to")
+    logger.fatal("no comment stores to create to")
 
   # If we weren't given a specific store to save to
   if store == "":
@@ -55,7 +55,7 @@ def createComment(text: "-text -t",
 
     # We couldn't find a valid store
     if i >= len(config["stores"]):
-      logFatal("no valid comment stores found")
+      logger.fatal("no valid comment stores found")
 
     currStore = config["stores"][i]
     print(config["stores"][i])
@@ -63,10 +63,10 @@ def createComment(text: "-text -t",
   # We were given a store to check
   else:
     currStore = ""
-    logFatal("store specification not yet supported [TODO]")
+    logger.fatal("store specification not yet supported [TODO]")
 
   if set == "":
-    with open(currStore + "/" + DEFAULT_SET_NAME + SET_EXTENSION, "a+") as file:
+    with open(currStore + "/" + DEFAULT_SET + SET_EXTENSION, "a+") as file:
       # TODO: Replace with generateAnchor
       # TODO: Create better comment storage format (that's simple)
       comment = "=====\n12345:\n" + text + "\n=====\n\n"

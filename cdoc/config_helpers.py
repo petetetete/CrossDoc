@@ -3,7 +3,7 @@ import os
 import json
 
 # Our module imports
-from .logging import *
+from .logging import logger
 
 # Constants
 CONFIG_NAME = "cdoc-config.json"
@@ -30,6 +30,6 @@ def getConfig():
       data = json.load(file)
 
   except FileNotFoundError:
-    logFatal("not in a CrossDoc project directory")
+    logger.fatal("not in a CrossDoc project directory")
 
   return data

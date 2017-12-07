@@ -1,11 +1,10 @@
 # Python Standard Library imports
 from inspect import signature, Parameter
 from difflib import SequenceMatcher
-from pprint import pprint
 
 # Our module imports
 from .registered_commands import registeredCommands
-from .logging import *
+from .logging import logger
 
 
 # Used to determine if two strings are similar
@@ -41,7 +40,7 @@ def outputSimilarCommands(identifier):
       if (id[1] is not None):  # Append command main id (if it is necessary)
         output += " (" + id[1] + ")"
 
-  logProgram(output)
+  logger.program(output)
 
 
 # Processes the command line input and runs the appropriate function
@@ -49,7 +48,7 @@ def processCommand(argv):
 
   if len(argv) == 1:
     # TODO: Create usage message system
-    logProgram("missing command")
+    logger.program("missing command")
     return
 
   identifier = argv[1]
@@ -96,8 +95,8 @@ def processCommand(argv):
     if required:
       # Case where the user has not provided ample info
       if matchingArg is None or matchingArg == []:
-        print("oops, they missed a param")
-        sys.exit()
+        # TODO: Replace with usage message
+        logger.fatal("oops, they missed a param")
       else:
         finalParams.append(matchingArg[0])
 

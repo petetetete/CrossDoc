@@ -3,30 +3,34 @@ import sys
 import os
 
 
-def logStandard(message):
-  """Logs a message to the user"""
+class logger:
 
-  print(message)
-  return
+  def standard(message):
+    """Logs a message to the user"""
 
+    print(message)
+    return
 
-def logCommand(message):
-  """Logs a message prefixed by the xommand that called this log"""
-  
-  # TODO
-  print(message)
-  return
+  def usage():
+    """Logs the usage message for the function that called this"""
 
+    # TODO: Look into the viability of this further (circular dependency issue)
+    # previousFrame = inspect.currentframe().f_back
+    # (_, _, functionName, _, _) = inspect.getframeinfo(previousFrame)
+    # print(functionName)
+    # print(registeredCommands[0].__name__)
 
-def logProgram(message):
-  """Logs a message prefixed by the program name to the user"""
-  name = os.path.splitext(os.path.basename(sys.argv[0]))[0]
-  print(name + ": " + message)
-  return
+    return
 
+  def program(message):
+    """Logs a message prefixed by the program name to the user"""
 
-def logFatal(message):
-  """Logs a fatal message to the user and kill the program"""
+    name = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+    print(name + ": " + message)
+    return
 
-  print("fatal: " + message)
-  sys.exit()
+  def fatal(message):
+    """Logs a fatal message to the user and kill the program"""
+
+    print("fatal: " + message)
+    sys.exit()
