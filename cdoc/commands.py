@@ -14,28 +14,64 @@ from .logging import *
 # simply take the first value the user gives
 
 
-def projectInit(name: "-name -n" = "Test"):
-  print(name)
+def projectInit(name: "-name -n" = "Default Project Name",
+                stores: "-stores -s" = []):
 
-  default = {
-    "project_name": "Default Project Name",
-    "stores": []
+  config = {
+    "project_name": name,
+    "stores": stores
   }
 
   try:
-    createConfig(default)
-
+    createConfig(config)
   except FileExistsError:
     logFatal("configuration file already exists")
 
+  logCommand(CONFIG_NAME + " initialized in this directory")
   return
 
 
-def createComment(text: "-text -t", set: "-set -s" = ""):
+def createComment(text: "-text -t",
+                  store: "-store -st" = "",  # TODO: Alias stores
+                  set: "-set" = ""):
 
-  print(text)
-  print(set)
+  # TODO: Move somwhere better
+  DEFAULT_SET_NAME = "No Set"
+  SET_EXTENSION = ".txt"
 
   pprint(getConfig())
+
+  config = getConfig()
+  if len(config["stores"]) == 0:
+    logFatal("no comment stores to create to")
+
+  # If we weren't given a specific store to save to
+  if store == "":
+
+    # Find first store that exists
+    i = 0
+    while i < len(config["stores"]) and not os.path.isdir(config["stores"][i]):
+      i += 1
+
+    # We couldn't find a valid store
+    if i >= len(config["stores"]):
+      logFatal("no valid comment stores found")
+
+    currStore = config["stores"][i]
+    print(config["stores"][i])
+
+  # We were given a store to check
+  else:
+    currStore = ""
+    logFatal("store specification not yet supported [TODO]")
+
+  if set == "":
+    with open(currStore + "/" + DEFAULT_SET_NAME + SET_EXTENSION, "a+") as file:
+      # TODO: Replace with generateAnchor
+      # TODO: Create better comment storage format (that's simple)
+      comment = "=====\n12345:\n" + text + "\n=====\n\n"
+      file.write(comment)
+
+  print(currStore)
 
   return

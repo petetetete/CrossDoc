@@ -10,6 +10,14 @@ def logStandard(message):
   return
 
 
+def logCommand(message):
+  """Logs a message prefixed by the xommand that called this log"""
+  
+  # TODO
+  print(message)
+  return
+
+
 def logProgram(message):
   """Logs a message prefixed by the program name to the user"""
   name = os.path.splitext(os.path.basename(sys.argv[0]))[0]
