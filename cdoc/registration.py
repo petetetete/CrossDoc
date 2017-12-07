@@ -8,4 +8,4 @@ from .commands import *
 #   parameter defaults -> denoting whether a param is required, and what type
 #                         of input should be provided (<list> or <value>)
 commands = [projectInit, createComment, generateAnchor,
-            fetchComment, deleteComment]
+            fetchComment, deleteComment, updateComment]

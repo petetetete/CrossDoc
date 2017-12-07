@@ -104,3 +104,21 @@ def deleteComment(anchor: "-anchor -a",
     file.truncate()
 
   return "comment at " + anchor + " deleted"
+
+
+def updateComment(anchor: "-anchor -a",
+                  text: "-text -t" = "",
+                  store: "-store -s" = None) -> "update-comment uc u":
+
+  try:
+    filePath, start, end = findComment(anchor, store)
+  except ValueError:
+    logger.fatal("comment anchor not found")
+
+  with open(filePath, "r+") as file:
+    lines = file.readlines()
+    file.seek(0)
+    file.writelines(lines[0:start + 1] + [text + "\n", "\n"] + lines[end:])
+    file.truncate()
+
+  return "comment at " + anchor + " updated"
