@@ -1,5 +1,5 @@
 # Python Standard Library imports
-from pprint import pprint
+import random
 
 # Our module imports
 from .config_helpers import *
@@ -27,8 +27,11 @@ def projectInit(name: "-name -n" = "Default Project Name",
   except FileExistsError:
     logger.fatal("configuration file already exists")
 
-  logger.standard(CONFIG_NAME + " initialized in this directory")
-  return
+  return CONFIG_NAME + " initialized in this directory"
+
+
+def generateAnchor() -> "generate-anchor ga g":
+  return "<&> " + str(random.getrandbits(24))
 
 
 def createComment(text: "-text -t",
@@ -38,8 +41,6 @@ def createComment(text: "-text -t",
   # TODO: Move somwhere better
   DEFAULT_SET = "No Set"
   SET_EXTENSION = ".txt"
-
-  pprint(getConfig())
 
   config = getConfig()
   if len(config["stores"]) == 0:
@@ -58,7 +59,6 @@ def createComment(text: "-text -t",
       logger.fatal("no valid comment stores found")
 
     currStore = config["stores"][i]
-    print(config["stores"][i])
 
   # We were given a store to check
   else:
@@ -69,7 +69,8 @@ def createComment(text: "-text -t",
     with open(currStore + "/" + DEFAULT_SET + SET_EXTENSION, "a+") as file:
       # TODO: Replace with generateAnchor
       # TODO: Create better comment storage format (that's simple)
-      comment = "<&> 123456anchorhere123456\n" + text + "\n\n"
+      anchor = generateAnchor()
+      comment = anchor + "\n" + text + "\n\n"
       file.write(comment)
 
-  return
+  return "comment created with anchor: " + anchor

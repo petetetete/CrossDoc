@@ -94,7 +94,9 @@ def processCommand(argv):
       finalParams.append(param.default)
 
   # Call the actual function with the users provided info
-  command(*finalParams)
+  output = command(*finalParams)
+  if output is not None:
+    logger.standard(output)
 
 
 # Used to determine if two strings are similar
