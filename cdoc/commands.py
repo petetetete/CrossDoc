@@ -87,3 +87,20 @@ def fetchComment(anchor: "-anchor -a",
 
   with open(filePath) as file:
     return "".join(file.readlines()[start + 1:end]).rstrip("\n")
+
+
+def deleteComment(anchor: "-anchor -a",
+                  store: "-store -s" = None) -> "delete-comment dc d":
+
+  try:
+    filePath, start, end = findComment(anchor, store)
+  except ValueError:
+    logger.fatal("comment anchor not found")
+
+  with open(filePath, "r+") as file:
+    lines = file.readlines()
+    file.seek(0)
+    file.writelines(lines[0:start] + lines[end:])
+    file.truncate()
+
+  return "comment at " + anchor + " deleted"
