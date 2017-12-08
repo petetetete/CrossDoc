@@ -23,7 +23,7 @@ function populateFiles(container, files) {
         versions.className = "file__versions";
         versions.innerHTML = f.versions.map((v, i) => 
             "<a href='deliverables/" + v + ".pdf' title='View version'>v"
-             + (i + 1) + "</a>");
+             + (i + 1) + "</a>").join("");
 
         var viewButton = document.createElement("a");
         viewButton.className = "file__button";
@@ -75,7 +75,7 @@ function populateFiles(container, files) {
 
 var documents = [{
         title: "Requirements Specification",
-        versions: ["Requirements Specification v1"]
+        versions: ["Requirements Specification v1", "Requirements Specification v2"]
     }, {
         title: "Technological Feasibility Analysis",
         versions: ["Technological Feasibility Analysis"]
