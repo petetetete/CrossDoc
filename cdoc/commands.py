@@ -36,19 +36,19 @@ def generateAnchor() -> "generate-anchor ga g":
 
 
 def createComment(text: "-text -t",
-                  store: "-store -st" = "",  # TODO: Alias stores
-                  set: "-set" = "") -> "create-comment cc c":
+                  store: "-store -st" = None,  # Referenced by index
+                  set: "-set" = None) -> "create-comment cc c":
 
   config = getConfig()
   if len(config["stores"]) == 0:
     logger.fatal("no comment stores to create to")
 
   # If we weren't given a specific store to save to
-  if store == "":
+  if store is None:
 
     # Find first store that exists
     i = 0
-    while i < len(config["stores"]) and not os.path.isdir(config["stores"][i]):
+    while i < len(config["stores"]) and not storeIsValid(config["stores"][i]):
       i += 1
 
     # We couldn't find a valid store
@@ -59,20 +59,19 @@ def createComment(text: "-text -t",
 
   # We were given a store to check
   else:
-    currStore = ""
-    logger.fatal("store specification not yet supported")
+    # TODO: Look into better store reference
+    if (int(store) < len(config["stores"]) and
+            storeIsValid(config["stores"][int(store)])):
+      currStore = config["stores"][int(store)]
+    else:
+      currStore = ""
+      logger.fatal("store specified is invalid")
 
-  if set == "":
-    with open(currStore + "/" + DEFAULT_SET + SET_EXTENSION, "a+") as file:
-      # TODO: Replace with generateAnchor
-      # TODO: Create better comment storage format (that's simple)
-      anchor = generateAnchor()
-      comment = anchor + "\n" + text + "\n\n"
-      file.write(comment)
-
-  # TODO: user specified a set
-  else:
-    logger.fatal("set specification not yet supported")
+  setToUse = DEFAULT_SET if set is None else set
+  with open(currStore + "/" + setToUse + SET_EXTENSION, "a+") as file:
+    anchor = generateAnchor()
+    comment = anchor + "\n" + text + "\n\n"
+    file.write(comment)
 
   return "comment created with anchor: " + anchor
 
