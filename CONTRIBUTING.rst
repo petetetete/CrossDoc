@@ -6,7 +6,6 @@ so external pull requests will not be accepted. Internally, pull
 requests will not be required but may be helpful for large or impactful
 commits.
 
-
 Getting Started
 ---------------
 
@@ -20,11 +19,10 @@ Then, to run the program, navigate your shell to the newly created
 
 If you want to test your local changes to the program in a directory
 eternal to ``CrossDoc``, be sure to locally install the package through
-pip with the following command (**Important:** Make sure you are in the ``CrossDoc``
-directory before doing this):
+pip with the following command (**Important:** Make sure you are in the
+``CrossDoc`` directory before doing this):
 
 ``pip install .`` or ``pip install . --upgrade`` to reinstall
-
 
 Code Formatting
 ---------------
@@ -51,39 +49,6 @@ can be customized with the following settings to match our standards:
             "E111", "E114", "E121"
         ]
     }
-
-
-Package Updating
-----------------
-
-Steps to creating and uploading a Pip update:
-
--  Tag release: ``git tag <x.y.z> -m <message>``
--  Push tag: ``git push --tags``
--  Setup distributions: ``python setup.py sdist``
--  Upload to pypi.org: ``twine upload dist/*``
-
-   -  Upload to test.pypi.org:
-      ``twine upload --repository testpypi dist/*``
-
-These steps assume that a .pypirc has already been setup that matches
-the following pattern:
-
-::
-
-    [distutils]
-    index-servers =
-      pypi
-      testpypi
-
-    [pypi]
-    username=<username>
-    password=<password>
-
-    [testpypi]
-    repository=https://test.pypi.org/legacy/
-    username=<username>
-    password=<password>
 
 .. _PEP8 guidelines: https://www.python.org/dev/peps/pep-0008/
 .. _Anaconda: http://damnwidget.github.io/anaconda/IDE/
