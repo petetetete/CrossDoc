@@ -22,4 +22,4 @@ Be sure to read over the `contributing write-up`_ before making a
 commit.
 
 .. _pip: https://pip.pypa.io/en/stable/
-.. _contributing write-up: CONTRIBUTING.md
+.. _contributing write-up: CONTRIBUTING.rst
