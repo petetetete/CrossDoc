@@ -17,6 +17,7 @@ setup(name='cross-doc',
       download_url='https://github.com/petetetete/CrossDoc/archive/0.1.1.tar.gz',
       keywords='CrossDoc documentation comments storage',
       packages=['cdoc'],
+      test_suite='tests.all',
       entry_points={
         'console_scripts': [
           'cross-doc = cdoc.__main__:main',
