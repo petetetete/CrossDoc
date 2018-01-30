@@ -1,5 +1,4 @@
 # Python Standard Library imports
-import os
 import random
 
 # Our module imports

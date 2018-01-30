@@ -36,6 +36,7 @@ enforce a 4 space tab, while we will be using 2.:
 -  E111
 -  E114
 -  E121
+-  E129
 
 One easy way to ensure this, is to use a linter for your editor of
 choice. For example, Sublime Text 3’s `Anaconda`_ implements this, and
