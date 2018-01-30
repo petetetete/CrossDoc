@@ -3,7 +3,7 @@ import os
 import json
 
 # Our module imports
-from .logging import logger
+from .logging import Logger
 
 # Constants
 CONFIG_NAME = "cdoc-config.json"
@@ -12,7 +12,7 @@ SET_EXTENSION = ".txt"
 ANCHOR_HOOK = "<&> "
 
 
-def createConfig(data):
+def create_config(data):
   """Create configuration file
 
   Raises:
@@ -27,7 +27,7 @@ def createConfig(data):
   return
 
 
-def getConfig():
+def get_config():
   """Trys to open the config file"""
 
   try:
@@ -35,27 +35,27 @@ def getConfig():
       data = json.load(file)
 
   except FileNotFoundError:
-    logger.fatal("not in a CrossDoc project directory")
+    Logger.fatal("not in a CrossDoc project directory")
 
   return data
 
 
-def storeIsValid(store):
+def store_is_valid(store):
   """Determine whether a given store is valid"""
 
   return os.path.isdir(store)
 
 
-def findComment(anchor, store=None):
+def find_comment(anchor, store=None):
   """Finds comment through stores or in a specific store
 
   Raises:
     ValueError: No matching comment found"""
 
-  config = getConfig()
+  config = get_config()
 
   for i, cStore in enumerate(config["stores"]):
-    if not storeIsValid(cStore) or store is not None and i != int(store):
+    if not store_is_valid(cStore) or store is not None and i != int(store):
       continue
 
     # Loop through all sets in the store

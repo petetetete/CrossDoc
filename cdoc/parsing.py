@@ -4,24 +4,24 @@ from difflib import SequenceMatcher
 
 # Our module imports
 import cdoc.registration
-from .logging import logger
+from .logging import Logger
 
 HELP_FLAGS = ["--h", "--help"]
 
 
 # Processes the command line input and runs the appropriate function
-def processCommand(argv):
+def process_command(argv):
 
   # They didn't give us anything
   if len(argv) == 1:
-    logger.usage()
+    Logger.usage()
     return
 
   identifier = argv[1]
 
   # They're looking for program level help text
   if len(argv) == 2 and identifier in HELP_FLAGS:
-    logger.usage()
+    Logger.usage()
     return
 
   # Find command requested in big list and run its associated function
@@ -31,14 +31,14 @@ def processCommand(argv):
 
   # No valid command was found, let's provide a helpful message
   if command is None:
-    outputSimilarCommands(identifier)
+    output_similar_commands(identifier)
     return
 
   args = argv[2:]  # Remaining relevant arguments
 
   # Print help text for the command if they've given us only a help flag
   if len(args) == 1 and args[0] in HELP_FLAGS:
-    logger.usage(command)
+    Logger.usage(command)
     return
 
   # Get command line argument information
@@ -71,7 +71,7 @@ def processCommand(argv):
     if required:
       # Case where the user has not provided ample info
       if matchingArg is None or matchingArg == []:
-        logger.usage(command)
+        Logger.usage(command)
         return
       else:
         finalParams.append(matchingArg[0])
@@ -96,23 +96,23 @@ def processCommand(argv):
   # Call the actual function with the users provided info
   output = command(*finalParams)
   if output is not None:
-    logger.standard(output)
+    Logger.standard(output)
 
 
 # Used to determine if two strings are similar
-def isSimilar(a, b):
+def is_similar(a, b):
   return SequenceMatcher(None, a, b).ratio() >= 0.5
 
 
 # Returns a list of tuples in which the first element is the command that
 # is similar to the input, and the second element is the primary identifier
 # of the command.
-def findSimilarIds(id):
+def find_similar_ids(id):
 
   similarIds = []
   for command in cdoc.registration.commands:
     identifiers = signature(command).return_annotation.split()
-    newId = next((i for i in identifiers if isSimilar(i, id)), None)
+    newId = next((i for i in identifiers if is_similar(i, id)), None)
     if (newId is not None):
       mainId = identifiers[0]
       similarIds.append([newId, mainId if newId != mainId else None])
@@ -120,11 +120,11 @@ def findSimilarIds(id):
   return similarIds
 
 
-def outputSimilarCommands(identifier):
+def output_similar_commands(identifier):
   output = "'" + identifier + "' is not a command."
 
   # If there are any similar commands, add them to the output string
-  similarIds = findSimilarIds(identifier)
+  similarIds = find_similar_ids(identifier)
   if (len(similarIds) > 0):
     output += "\n\nSimilar commands:"
 
@@ -133,4 +133,4 @@ def outputSimilarCommands(identifier):
       if (id[1] is not None):  # Append command main id (if it is necessary)
         output += " (" + id[1] + ")"
 
-  logger.program(output)
+  Logger.program(output)

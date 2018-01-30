@@ -2,11 +2,11 @@
 import sys
 
 # Our module imports
-from .parsing import processCommand
+from .parsing import process_command
 
 
 def main():
-  processCommand(sys.argv)
+  process_command(sys.argv)
 
 
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ from inspect import signature, Parameter
 import cdoc.registration
 
 
-class logger:
+class Logger:
 
   def standard(message):
     """Logs a message to the user (non-ending)"""
@@ -56,18 +56,18 @@ class logger:
       output += name + " <command>\n\nAll CrossDoc commands:\n  "
       output += "\n  ".join(commands)
 
-    logger.standard(output)
+    Logger.standard(output)
     return
 
   def program(message):
     """Logs a message prefixed by the program name to the user (non-ending)"""
 
     name = os.path.splitext(os.path.basename(sys.argv[0]))[0]
-    logger.standard(name + ": " + message)
+    Logger.standard(name + ": " + message)
     return
 
   def fatal(message):
     """Logs a fatal message to the user and kill the program (ending)"""
 
-    logger.standard("fatal: " + message)
+    Logger.standard("fatal: " + message)
     sys.exit()
