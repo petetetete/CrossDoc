@@ -44,12 +44,16 @@
 
 .contacts {
     display: flex;
-    margin-bottom: 20px;
+    margin-left: -10px;
+    margin-right: -10px;
+}
+.contact-group {
+    display: flex;
 }
 .contact {
     position: relative;
 
-    margin: 0 10px;
+    margin: 0 10px 20px 10px;
     width: 100%;
 
     background-color: #fbfbfb;
@@ -72,6 +76,14 @@
 
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
+    }
+
+    .contact__name {
+        margin-top: -6px;
+        transition: margin-top ease-in-out .2s;
+    }
+    .contact:hover > .contact__descr > .contact__name {
+        margin-top: 0px;
     }
 
     .contact__descr {
@@ -334,22 +346,25 @@
             transform: none;
             width: auto !important;
         }
+
+
+    .contacts {
+        flex-direction: column;
+        margin-left: 0;
+        margin-right: 0;
+    }
 }
 
 
 @media (max-width: 577px) {
     
-    .contacts {
+    .contact-group {
         flex-direction: column;
     }
     .contact {
         margin-left: 0;
         margin-right: 0;
-        margin-bottom: 20px;
     }
-        .contact:last-child {
-            margin-bottom: 0;
-        }
 
 
     .file__button {
