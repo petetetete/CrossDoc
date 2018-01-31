@@ -49,6 +49,7 @@
 }
 .contact-group {
     display: flex;
+    width: 100%;
 }
 .contact {
     position: relative;
