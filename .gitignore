@@ -1,5 +1,11 @@
+# Python build files
 __pycache__/
+
+# SetupTools release files
 *.egg-info
 dist
-cdoc-config.json
+
+# Test CrossDoc repository directories/files
 cdoc-test
+test_project
+cdoc-config.json

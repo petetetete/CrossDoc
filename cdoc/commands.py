@@ -2,6 +2,7 @@
 import random
 import time
 import hashlib
+import os
 
 # Our module imports
 from .config_helpers import *
@@ -38,11 +39,12 @@ def generate_anchor() -> "generate-anchor ga g":
   string_to_hash = str(time.time()) + "|" + str(random.uniform(0, 1))
   final_hash = hashlib.md5(string_to_hash.encode("utf-8")).hexdigest()
 
-  return "<&> " + final_hash[:hash_length]
+  return ANCHOR_HOOK + final_hash[:hash_length]
 
 
 def create_comment(text: "-text -t",
                    store: "-store -st" = None,  # Referenced by index
+                   anchor: "-anchor -a" = None,
                    set: "-set" = None) -> "create-comment cc c":
 
   config = get_config()
@@ -62,25 +64,48 @@ def create_comment(text: "-text -t",
     if i >= len(config["stores"]):
       Logger.fatal("no valid comment stores found")
 
-    currStore = config["stores"][i]
+    curr_store = config["stores"][i]
 
   # We were given a store to check
   else:
     # TODO: Look into better store reference
     if (int(store) < len(config["stores"]) and
             store_is_valid(config["stores"][int(store)])):
-      currStore = config["stores"][int(store)]
+      curr_store = config["stores"][int(store)]
     else:
-      currStore = ""
+      curr_store = ""
       Logger.fatal("store specified is invalid")
 
-  setToUse = DEFAULT_SET if set is None else set
-  with open(currStore + "/" + setToUse + SET_EXTENSION, "a+") as file:
-    anchor = generate_anchor()
-    comment = anchor + "\n" + text + "\n\n"
-    file.write(comment)
+  # Determine the set and anchors to use
+  set_to_use = DEFAULT_SET if set is None else set
+  anchor_to_use = generate_anchor() if anchor is None else anchor
 
-  return "comment created with anchor: " + anchor
+  # Remove anchor hook from path if present
+  if anchor_to_use.startswith(ANCHOR_HOOK):
+    file_name = anchor_to_use[len(ANCHOR_HOOK):]
+  else:
+    file_name = anchor_to_use
+    anchor_to_use = ANCHOR_HOOK + anchor_to_use
+
+  file_path = curr_store + "/" + file_name + ANCHOR_EXTENSION
+
+  # Create list to store sets or get it if it already exists
+  anchor_json = []
+  if os.path.isfile(file_path) and os.stat(file_path).st_size != 0:
+    with open(file_path) as file:
+      anchor_json = json.load(file)
+
+  # Replace existing set or add new set
+  found_set = next((s for s in anchor_json if s["set"] == set_to_use), None)
+  if found_set:
+    found_set["comment"] = text
+  else:
+    anchor_json.append({"set": set_to_use, "comment": text})
+
+  with open(file_path, "w") as file:
+    json.dump(anchor_json, file, indent=4)
+
+  return anchor_to_use
 
 
 def fetch_comment(anchor: "-anchor -a",

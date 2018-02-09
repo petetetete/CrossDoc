@@ -8,7 +8,7 @@ from .logging import Logger
 # Constants
 CONFIG_NAME = "cdoc-config.json"
 DEFAULT_SET = "No Set"
-SET_EXTENSION = ".txt"
+ANCHOR_EXTENSION = ".json"
 ANCHOR_HOOK = "<&> "
 
 
@@ -63,7 +63,7 @@ def find_comment(anchor, store=None):
       set = os.fsdecode(file)
 
       # Skip files that are not sets
-      if not set.endswith(SET_EXTENSION):
+      if not set.endswith(ANCHOR_EXTENSION):
         continue
 
       filePath = os.path.join(cStore, set)
