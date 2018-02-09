@@ -1,5 +1,7 @@
 # Python Standard Library imports
 import random
+import time
+import hashlib
 
 # Our module imports
 from .config_helpers import *
@@ -31,7 +33,12 @@ def project_init(name: "-name -n" = "Default Project Name",
 
 
 def generate_anchor() -> "generate-anchor ga g":
-  return ANCHOR_HOOK + str(random.getrandbits(24))
+
+  hash_length = 16
+  string_to_hash = str(time.time()) + "|" + str(random.uniform(0, 1))
+  final_hash = hashlib.md5(string_to_hash.encode("utf-8")).hexdigest()
+
+  return "<&> " + final_hash[:hash_length]
 
 
 def create_comment(text: "-text -t",
