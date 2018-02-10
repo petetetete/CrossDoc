@@ -3,7 +3,6 @@ import sublime_plugin
 from subprocess import check_output
 import os
 
-
 ANCHOR_HOOK = "<&> "
 
 

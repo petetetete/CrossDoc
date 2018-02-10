@@ -30,12 +30,14 @@ def create_config(data):
 def get_config():
   """Trys to open the config file"""
 
-  try:
-    with open("cdoc-config.json", "r") as file:
-      data = json.load(file)
+  # Get the path to the configuration file
+  path = find_config_path(os.getcwd())
 
-  except FileNotFoundError:
+  if path is None:
     Logger.fatal("not in a CrossDoc project directory")
+
+  with open(path, "r") as file:
+    data = json.load(file)
 
   return data
 
@@ -47,6 +49,10 @@ def store_is_valid(store):
 
 
 def find_comment(anchor, store=None):
+  """Find the comment in the specified store or any store
+
+  Raises:
+    ValueError: No valid comment stores found"""
 
   config = get_config()
 
@@ -94,8 +100,33 @@ def find_comment(anchor, store=None):
 
 
 def add_anchor_prefix(anchor):
+  """Prefix anchor with hook if missing it"""
 
   if anchor.startswith(ANCHOR_HOOK):
     return anchor
   else:
     return ANCHOR_HOOK + anchor
+
+
+def find_config_path(base):
+  """Recursively find path to the config file if it exists"""
+
+  # Ensure that the given path is a directory
+  curr_path = base if os.path.isdir(base) else os.path.dirname(base)
+
+  # Iterate up from the given directory looking for the file
+  while True:
+
+    # If we found the config
+    curr_check = os.path.join(curr_path, "cdoc-config.json")
+    if os.path.isfile(curr_check):
+      return curr_check
+
+    # Break when we've hit the root
+    if os.path.dirname(curr_path) == curr_path:
+      break
+
+    # Pop off a directory
+    curr_path = os.path.dirname(curr_path)
+
+  return None
