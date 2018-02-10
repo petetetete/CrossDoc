@@ -47,41 +47,55 @@ def store_is_valid(store):
 
 
 def find_comment(anchor, store=None):
-  """Finds comment through stores or in a specific store
-
-  Raises:
-    ValueError: No matching comment found"""
 
   config = get_config()
 
-  for i, cStore in enumerate(config["stores"]):
-    if not store_is_valid(cStore) or store is not None and i != int(store):
-      continue
+  # If we weren't given a specific store to save to
+  if store is None:
+    curr_store = next((s for s in config["stores"] if store_is_valid(s)), None)
 
-    # Loop through all sets in the store
-    for file in os.listdir(os.fsencode(cStore)):
-      set = os.fsdecode(file)
+    if curr_store is None:
+      raise ValueError("No valid comment stores found")
 
-      # Skip files that are not sets
-      if not set.endswith(ANCHOR_EXTENSION):
-        continue
+  # We were given a store to check
+  else:
+    # TODO: Look into better store reference
+    store = int(store)
+    if ((store >= 0 and store < len(config["stores"])) and
+            store_is_valid(config["stores"][store])):
+      curr_store = config["stores"][store]
+    else:
+      raise ValueError("Store specified is invalid")
 
-      filePath = os.path.join(cStore, set)
-      with open(filePath) as file:
+  # Remove anchor hook if it exists
+  if anchor.startswith(ANCHOR_HOOK):
+    anchor = anchor[len(ANCHOR_HOOK):]
 
-        lines = file.readlines()
-        start = next((i for i, l in enumerate(lines)
-                      if l.strip("\n").replace(ANCHOR_HOOK, "") == anchor),
-                     None)
+  # Find the matching anchor
+  all_files = os.listdir(os.fsencode(curr_store))
+  file_name = next((os.fsdecode(f) for f in all_files
+                    if os.fsdecode(f) == anchor + ANCHOR_EXTENSION), None)
 
-        if start is not None:
-          end = next((i for i, l in enumerate(lines[start + 1:])
-                      if ANCHOR_HOOK in l),
-                     None)
+  # If we found a matching anchor
+  if file_name is not None:
+    file_path = os.path.join(curr_store, file_name)
 
-          if end is None:
-            return filePath, start, len(lines)
-          else:
-            return filePath, start, start + end + 1
+    # Get json from anchor
+    anchor_json = []
+    if os.path.isfile(file_path) and os.stat(file_path).st_size != 0:
+      with open(file_path) as file:
+        anchor_json = json.load(file)
 
-  raise ValueError("No matching comment found")
+    return file_path, anchor_json
+
+  # No anchor found
+  else:
+    raise ValueError("Anchor not found")
+
+
+def add_anchor_prefix(anchor):
+
+  if anchor.startswith(ANCHOR_HOOK):
+    return anchor
+  else:
+    return ANCHOR_HOOK + anchor

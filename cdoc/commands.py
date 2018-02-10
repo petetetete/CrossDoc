@@ -45,7 +45,7 @@ def generate_anchor() -> "generate-anchor ga g":
 def create_comment(text: "-text -t",
                    store: "-store -st" = None,  # Referenced by index
                    anchor: "-anchor -a" = None,
-                   set: "-set" = None) -> "create-comment cc c":
+                   set: "-set" = DEFAULT_SET) -> "create-comment cc c":
 
   config = get_config()
   if len(config["stores"]) == 0:
@@ -76,8 +76,7 @@ def create_comment(text: "-text -t",
       curr_store = ""
       Logger.fatal("store specified is invalid")
 
-  # Determine the set and anchors to use
-  set_to_use = DEFAULT_SET if set is None else set
+  # Determine the anchor to use
   anchor_to_use = generate_anchor() if anchor is None else anchor
 
   # Remove anchor hook from path if present
@@ -96,11 +95,11 @@ def create_comment(text: "-text -t",
       anchor_json = json.load(file)
 
   # Replace existing set or add new set
-  found_set = next((s for s in anchor_json if s["set"] == set_to_use), None)
+  found_set = next((s for s in anchor_json if s["set"] == set), None)
   if found_set:
     found_set["comment"] = text
   else:
-    anchor_json.append({"set": set_to_use, "comment": text})
+    anchor_json.append({"set": set, "comment": text})
 
   with open(file_path, "w") as file:
     json.dump(anchor_json, file, indent=4)
@@ -109,47 +108,81 @@ def create_comment(text: "-text -t",
 
 
 def fetch_comment(anchor: "-anchor -a",
-                  store: "-store -s" = None) -> "fetch-comment fc f":
+                  store: "-store -s" = None,
+                  set: "-set" = DEFAULT_SET) -> "fetch-comment fc f":
 
   try:
-    filePath, start, end = find_comment(anchor, store)
+    file_path, anchor_json = find_comment(anchor, store)
   except ValueError:
     Logger.fatal("comment anchor not found")
 
-  with open(filePath) as file:
-    return "".join(file.readlines()[start + 1:end]).rstrip("\n")
+  found_set = next((s for s in anchor_json if s["set"] == set), None)
+  if found_set:
+    return found_set["comment"]
+  else:
+    Logger.fatal("comment set not found")
 
 
 def delete_comment(anchor: "-anchor -a",
-                   store: "-store -s" = None) -> "delete-comment dc d":
+                   store: "-store -s" = None,
+                   set: "-set" = None) -> "delete-comment dc d":
 
   try:
-    filePath, start, end = find_comment(anchor, store)
+    file_path, anchor_json = find_comment(anchor, store)
   except ValueError:
     Logger.fatal("comment anchor not found")
 
-  with open(filePath, "r+") as file:
-    lines = file.readlines()
-    file.seek(0)
-    file.writelines(lines[0:start] + lines[end:])
-    file.truncate()
+  # If no set specified, delete the whole comment
+  if set is None:
+    os.remove(file_path)
+    return "anchor \"" + add_anchor_prefix(anchor) + "\" deleted"
 
-  return "comment at " + anchor + " deleted"
+  # If we only want to delete a specific set
+  else:
+
+    # Find index of set to delete
+    set_i = next((i for i, s in enumerate(anchor_json)
+                  if s["set"] == set), None)
+
+    # Fail if not found
+    if set_i is None:
+      Logger.fatal("comment set not found")
+
+    # Delete set and update json
+    else:
+      set_name = anchor_json[set_i]["set"]
+      del anchor_json[set_i]
+
+      with open(file_path, "w") as file:
+        json.dump(anchor_json, file, indent=4)
+
+      return ("set \"" + set_name + "\" at \"" +
+              add_anchor_prefix(anchor) + "\" deleted")
 
 
 def update_comment(anchor: "-anchor -a",
-                   text: "-text -t" = "",
-                   store: "-store -s" = None) -> "update-comment uc u":
+                   text: "-text -t",
+                   store: "-store -s" = None,
+                   set: "-set" = DEFAULT_SET) -> "update-comment uc u":
 
   try:
-    filePath, start, end = find_comment(anchor, store)
+    file_path, anchor_json = find_comment(anchor, store)
   except ValueError:
     Logger.fatal("comment anchor not found")
 
-  with open(filePath, "r+") as file:
-    lines = file.readlines()
-    file.seek(0)
-    file.writelines(lines[0:start + 1] + [text + "\n", "\n"] + lines[end:])
-    file.truncate()
+  set_i = next((i for i, s in enumerate(anchor_json)
+                if s["set"] == set), None)
 
-  return "comment at " + anchor + " updated"
+  # Fail if not found
+  if set_i is None:
+    Logger.fatal("comment set not found")
+
+  # Update set and update json
+  else:
+    anchor_json[set_i]["comment"] = text
+
+    with open(file_path, "w") as file:
+      json.dump(anchor_json, file, indent=4)
+
+  return ("set \"" + anchor_json[set_i]["set"] + "\" at \"" +
+          add_anchor_prefix(anchor) + "\" updated")
