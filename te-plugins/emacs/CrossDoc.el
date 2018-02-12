@@ -1,3 +1,23 @@
+(defun delete-comment ()
+  (interactive)
+
+  ; Get the current line position of cursor 
+  (setq curr-line (split-string (thing-at-point 'line )))
+
+  ; Check and see if we are in a CrossDoc comment
+  (if (string= "<&>" (cadr curr-line))
+    (progn
+      (setq output (shell-command-to-string (concat "cdoc dc -a " (cadr (cdr curr-line)))))
+      (if (not (string= "fatal" (substring output 0 5)))
+        (kill-whole-line) ; If not fatal, delete line in text file
+        (message output) ; else if fatal show output
+        )
+      )
+
+    (message "fatal: not highlighting a CrossDoc comment")
+    )
+  )
+
 (defun insert-comment ()
   (interactive)
 
@@ -28,6 +48,7 @@
 
 ; Set command hot keys and provide package
 (global-set-key [f6] 'insert-comment)
+(global-set-key [f7] 'delete-comment)
 (provide 'cdoc)
 
 
