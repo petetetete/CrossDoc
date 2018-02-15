@@ -46,13 +46,14 @@ def process_command(argv):
   for i in range(len(args)):
 
     # Skip past args that aren't a parameter (for now)
-    if args[i][0] != '-' or args[i] in argsMap:
+    if len(args[i]) == 0 or args[i][0] != '-' or args[i] in argsMap:
       continue
 
     # Initialize map element
     currList = argsMap[args[i]] = []
 
-    while i + 1 < len(args) and args[i + 1][0] != '-':
+    while (i + 1 < len(args) and
+           (len(args[i + 1]) == 0 or args[i + 1][0] != '-')):
       i += 1  # Increment iterator
       currList.append(args[i])  # Append parameter to current list
 
