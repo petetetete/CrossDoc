@@ -1,0 +1,50 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "crossdoc-atom Toggle",
+        "command": "crossdoc-atom:toggle"
+      },
+      {
+        "label": "crossdoc-atom reverseText",
+        "command": "crossdoc-atom:reverseText"
+      },
+      {
+        "label": "crossdoc-atom insertAnchor",
+        "command": "crossdoc-atom:insertAnchor"
+      },
+      {
+        "label": "crossdoc-atom deleteAnchor",
+        "command": "crossdoc-atom:deleteAnchor"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "crossdoc-atom",
+          "submenu": [
+            {
+              "label": "Toggle",
+              "command": "crossdoc-atom:toggle"
+            },
+            {
+              "label": "reverseText",
+              "command": "crossdoc-atom:reverseText"
+            },
+            {
+              "label": "crossdoc-atom insertAnchor",
+              "command": "crossdoc-atom:insertAnchor"
+            },
+            {
+              "label": "crossdoc-atom deleteAnchor",
+              "command": "crossdoc-atom:deleteAnchor"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
