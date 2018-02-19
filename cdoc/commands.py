@@ -20,6 +20,7 @@ from .logging import Logger
 def project_init(name: "-name -n" = "Default Project Name",
                  stores: "-stores -s" = []) -> "init i":
 
+  # <&> 01d547b19f3bcef1 [COMMENT HERE]
   config = {
     "project_name": name,
     "stores": stores
