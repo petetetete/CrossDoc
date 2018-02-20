@@ -1,17 +1,35 @@
+; Debug flag
+; (setq debug-on-error t)
+
 (defun update-comment()
   (interactive)
 
-  ; gets contents from a file path
-  (with-temp-buffer
-    (insert-file-contents filePath)
-    (buffer-string)
-    )
-  ; gets output of update comment
-  (setq output (shell-command-to-string(concat "cdoc uc -a\"[Anchor]|\" -t\"[Insert comment\"")))
+  ; Get lines of the current buffer
+  (setq curr-buffer-lines (split-string (buffer-string) "\n" t))
 
-  ; use save-after-hook to save after a buffer has been saved and visited
+  ; For each line in buffer
+  (dolist (elt curr-buffer-lines)
 
-  )
+    ; Save split line
+    (setq split-line (split-string elt " " t))
+
+    ; If we are at a CrossDoc comment
+    (if (string= "<&>" (nth 1 split-line))
+      (progn
+        ; Save the current lines comment text
+        (setq comment-text (mapconcat 'identity (nthcdr 3 split-line) " "))
+        ;(message (concat "cdoc uc -a " (nth 2 split-line) " -t \"" comment-text "\""))
+
+        ; Send off update-comment
+        (setq output (substring (shell-command-to-string (concat "cdoc uc -a " (nth 2 split-line) " -t \"" comment-text "\"")) 0 -1))
+
+        ; Message CrossDoc output
+        
+        (if (string= "fatal" (substring output 0 5))
+          (message output) ; Show output on fatal
+          ; Do nothing on else
+          )))))
+
 
 (defun delete-comment ()
   (interactive)
@@ -22,16 +40,15 @@
   ; Check and see if we are in a CrossDoc comment
   (if (string= "<&>" (cadr curr-line))
     (progn
-      (setq output (shell-command-to-string (concat "cdoc dc -a " (cadr (cdr curr-line)))))
+      (setq output (substring (shell-command-to-string (concat "cdoc dc -a " (nth 2 curr-line))) 0 -1))
       (if (not (string= "fatal" (substring output 0 5)))
         (kill-whole-line) ; If not fatal, delete line in text file
-        (message output) ; else if fatal show output
+        (message output) ; Else if fatal show output
         )
       )
 
-    (message "fatal: not highlighting a CrossDoc comment")
-    )
-  )
+    (message "fatal: not highlighting a CrossDoc comment")))
+
 
 (defun insert-comment ()
   (interactive)
@@ -56,15 +73,15 @@
       (indent-according-to-mode))
 
     ; Else if fatal: forward the fatal message to the console
-    (message output)
-    
-    )
-  )
+    (message output)))
 
-; Set command hot keys and provide package
+
+; Set command hot keys
 (global-set-key [f6] 'insert-comment)
 (global-set-key [f7] 'delete-comment)
 (global-set-key [f8] 'update-comment)
+
+; Add hooks
+(add-hook 'after-save-hook 'update-comment)
+
 (provide 'cdoc)
-
-
