@@ -20,7 +20,6 @@ from .logging import Logger
 def project_init(name: "-name -n" = "Default Project Name",
                  stores: "-stores -s" = []) -> "init i":
 
-  # <&> 01d547b19f3bcef1 [COMMENT HERE]
   config = {
     "project_name": name,
     "stores": stores
@@ -103,7 +102,7 @@ def create_comment(text: "-text -t",
     anchor_json.append({"set": set, "comment": text})
 
   with open(file_path, "w") as file:
-    json.dump(anchor_json, file, indent=4)
+    json.dump(anchor_json, file, indent=4, sort_keys=True)
 
   return anchor_to_use + " " + text
 
@@ -155,7 +154,7 @@ def delete_comment(anchor: "-anchor -a",
       del anchor_json[set_i]
 
       with open(file_path, "w") as file:
-        json.dump(anchor_json, file, indent=4)
+        json.dump(anchor_json, file, indent=4, sort_keys=True)
 
       return ("set \"" + set_name + "\" at \"" +
               add_anchor_prefix(anchor) + "\" deleted")
@@ -183,7 +182,7 @@ def update_comment(anchor: "-anchor -a",
     anchor_json[set_i]["comment"] = text
 
     with open(file_path, "w") as file:
-      json.dump(anchor_json, file, indent=4)
+      json.dump(anchor_json, file, indent=4, sort_keys=True)
 
   return ("set \"" + anchor_json[set_i]["set"] + "\" at \"" +
           add_anchor_prefix(anchor) + "\" updated")

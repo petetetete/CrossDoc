@@ -14,20 +14,19 @@ below instructions.
 Atom
 ~~~~
 
--  Download and save the crossdoc-atom package to Drive:/Users/(Username)/.atom/packages
+-  Download and save the crossdoc-atom package to ``~.atom/packages``
 -  Reload or Launch Atom window, navigate to Packages where CrossDoc modules should be available.
 
 Emacs
 ~~~~~
 
--  Download and save the ``emacs/CrossDoc.el`` file to anywhere on your
-   computer
--  In Emacs, run the command ``M-x load-file``
+-  Download and save the ``emacs/CrossDoc.el`` file in your ``"~/.emacs.d/lisp"`` directory
+-  Add the following lines to your ``~.emacs`` file
 
-   -  ``M-<chr>`` means hold the META or EDIT or ALT key down while
-      typing ``<chr>``
+   -  ``(add-to-list 'load-path "~/.emacs.d/lisp")``
+   -  ``(load "CrossDoc.el")``
 
--  Enter the path to the ``CrossDoc.el`` file
+-  The plugin will now auto-load on launching emacs
 
 Sublime
 ~~~~~~~
