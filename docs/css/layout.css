@@ -197,16 +197,10 @@ body {
     padding: 10px 20px;
 }
 
-.row {
-    display: flex;
-    margin-left: -10px;
-    margin-right: -10px;
-}
-
-.col {
-    padding: 0 10px;
-    flex: 1;
-    overflow: hidden;
+.cols-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-gap: 16px;
 }
 
 .footer {
@@ -384,4 +378,12 @@ body {
         margin-top: -10px;
     }
 
+}
+
+@media (max-width: 577px) {
+
+    .cols-2 {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    
 }
