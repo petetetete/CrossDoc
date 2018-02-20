@@ -1,3 +1,18 @@
+(defun update-comment()
+  (interactive)
+
+  ; gets contents from a file path
+  (with-temp-buffer
+    (insert-file-contents filePath)
+    (buffer-string)
+    )
+  ; gets output of update comment
+  (setq output (shell-command-to-string(concat "cdoc uc -a\"[Anchor]|\" -t\"[Insert comment\"")))
+
+  ; use save-after-hook to save after a buffer has been saved and visited
+
+  )
+
 (defun delete-comment ()
   (interactive)
 
@@ -49,6 +64,7 @@
 ; Set command hot keys and provide package
 (global-set-key [f6] 'insert-comment)
 (global-set-key [f7] 'delete-comment)
+(global-set-key [f8] 'update-comment)
 (provide 'cdoc)
 
 
