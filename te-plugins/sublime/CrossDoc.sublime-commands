@@ -6,5 +6,9 @@
     {
         "caption": "CrossDoc: Delete Comment",
         "command": "delete_comment"
+    },
+    {
+        "caption": "CrossDoc: Update Comments",
+        "command": "update_comments"
     }
 ]

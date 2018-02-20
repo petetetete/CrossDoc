@@ -76,9 +76,10 @@ class DeleteCommentCommand(sublime_plugin.TextCommand):
     v.erase(edit, line)
 
 
-class UpdateOnSave(sublime_plugin.EventListener):
+class UpdateCommentsCommand(sublime_plugin.TextCommand):
 
-  def on_post_save_async(self, v):
+  def run(self, edit):
+    v = self.view
 
     # Get current file contents
     file_contents = v.substr(sublime.Region(0, v.size()))
@@ -113,6 +114,13 @@ class UpdateOnSave(sublime_plugin.EventListener):
         if output.startswith("fatal"):
           print("warning: unable to update comment at line", line_num)
           return
+
+
+# Event listener callbacks
+class UpdateOnSave(sublime_plugin.EventListener):
+
+  def on_post_save_async(self, v):
+    v.run_command("update_comments")
 
 
 # Helper Methods #

@@ -1,0 +1,9 @@
+// Example hotkey file
+// Can use platform specific keybindings with the following file names:
+// Default (OSX).sublime-keymap
+// Default (Linux).sublime-keymap
+// Default (Windows).sublime-keymap
+
+[
+    //{ "keys": ["ctrl+shift+c"], "command": "insert_comment" }
+]
