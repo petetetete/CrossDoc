@@ -14,7 +14,7 @@ below instructions.
 Atom
 ~~~~
 
--  Download and save the crossdoc-atom package to ``~.atom/packages``
+-  Download and save the crossdoc-atom package to ``~/.atom/packages``
 -  Reload or Launch Atom window, navigate to Packages where CrossDoc modules should be available.
 
 Emacs

@@ -1,7 +1,7 @@
 ; Debug flag
 ; (setq debug-on-error t)
 
-(defun update-comment()
+(defun update-comments()
   (interactive)
 
   ; Get lines of the current buffer
@@ -18,13 +18,11 @@
       (progn
         ; Save the current lines comment text
         (setq comment-text (mapconcat 'identity (nthcdr 3 split-line) " "))
-        ;(message (concat "cdoc uc -a " (nth 2 split-line) " -t \"" comment-text "\""))
 
         ; Send off update-comment
         (setq output (substring (shell-command-to-string (concat "cdoc uc -a " (nth 2 split-line) " -t \"" comment-text "\"")) 0 -1))
 
         ; Message CrossDoc output
-        
         (if (string= "fatal" (substring output 0 5))
           (message output) ; Show output on fatal
           ; Do nothing on else
@@ -43,9 +41,7 @@
       (setq output (substring (shell-command-to-string (concat "cdoc dc -a " (nth 2 curr-line))) 0 -1))
       (if (not (string= "fatal" (substring output 0 5)))
         (kill-whole-line) ; If not fatal, delete line in text file
-        (message output) ; Else if fatal show output
-        )
-      )
+        (message output))) ; Else if fatal show output
 
     (message "fatal: not highlighting a CrossDoc comment")))
 
@@ -82,6 +78,6 @@
 (global-set-key [f8] 'update-comment)
 
 ; Add hooks
-(add-hook 'after-save-hook 'update-comment)
+(add-hook 'after-save-hook 'update-comments)
 
 (provide 'cdoc)
