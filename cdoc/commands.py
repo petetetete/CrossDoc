@@ -104,7 +104,7 @@ def create_comment(text: "-text -t",
   with open(file_path, "w") as file:
     json.dump(anchor_json, file, indent=4, sort_keys=True)
 
-  return anchor_to_use + " " + text
+  return anchor_to_use + " [" + set + "]" + "\n" + text
 
 
 def fetch_comment(anchor: "-anchor -a",

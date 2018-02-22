@@ -34,7 +34,8 @@ def process_command(argv):
     output_similar_commands(identifier)
     return
 
-  args = argv[2:]  # Remaining relevant arguments
+  # Decode and save the temaining relevant arguments
+  args = [bytes(x, "utf-8").decode("unicode_escape") for x in argv[2:]]
 
   # Print help text for the command if they've given us only a help flag
   if len(args) == 1 and args[0] in HELP_FLAGS:
