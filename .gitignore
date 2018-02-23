@@ -9,3 +9,7 @@ dist
 cdoc-test
 test_project
 cdoc-config.json
+
+# Ignore misc files
+.#*
+\#*

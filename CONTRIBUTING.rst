@@ -15,7 +15,7 @@ Firstly, clone the repository:
 Then, to run the program, navigate your shell to the newly created
 ``CrossDoc`` directory, and run the following command:
 
-``python -m cdoc.__main__``
+``python -m cdoc``
 
 If you want to test your local changes to the program in a directory
 eternal to ``CrossDoc``, be sure to locally install the package through
