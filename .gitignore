@@ -13,3 +13,5 @@ cdoc-config.json
 # Ignore misc files
 .#*
 \#*
+te-plugins/vim/.CrossDoc.vim.un~
+te-plugins/vim/CrossDoc.vim~

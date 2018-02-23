@@ -40,26 +40,32 @@ function Update(ucomment)
         :exe system("cdoc uc" . a:ucomment)
 endfunction
 
+"Comment() will search for the file type and add the correct comment Symbol
 function! Comment()
-  let ext = tolower(expand('%:e'))
-  if ext == 'php' || ext == 'rb' || ext == 'sh' || ext == 'py'
-    silent s/^/\#/
-  elseif ext == 'js'
-    silent s:^:\/\/:g
-  elseif ext == 'vim'
-    silent s:^:\":g
-  endif
+	let ext = tolower(expand('%:e'))
+	if ext == 'php' || ext == 'rb' || ext == 'sh' || ext == 'py'
+		silent s/^/\#/
+	elseif ext == 'js'
+		silent s:^:\/\/:g
+	elseif ext == 'vim'
+		silent s:^:\":g
+	endif
 endfunction
 
+"Uncomment() search for the file type and remove the correct comment Symbol
 function! Uncomment()
-  let ext = tolower(expand('%:e'))
-  if ext == 'php' || ext == 'rb' || ext == 'sh' || ext == 'py'
-    silent s/^\#//
-  elseif ext == 'js'
-    silent s:^\/\/::g
-  elseif ext == 'vim'
-    silent s:^\"::g
-  endif
+	let ext = tolower(expand('%:e'))
+	if ext == 'php' || ext == 'rb' || ext == 'sh' || ext == 'py'
+		silent s/^\#//
+	elseif ext == 'js'
+		silent s:^\/\/::g
+	elseif ext == 'vim'
+		silent s:^\"::g
+	endif
 endfunction
 
+"Hotkey for Cross-Doc functionality
 map <F6> :call Insert()
+map <F7> :call Delete()
+map <F8> :call Update()
+
