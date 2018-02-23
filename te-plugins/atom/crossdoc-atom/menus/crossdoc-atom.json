@@ -16,6 +16,10 @@
       {
         "label": "crossdoc-atom deleteAnchor",
         "command": "crossdoc-atom:deleteAnchor"
+      },
+      {
+        "label": "crossdoc-atom testingShell",
+        "command": "crossdoc-atom:testingShell"
       }
     ]
   },
@@ -41,6 +45,10 @@
             {
               "label": "crossdoc-atom deleteAnchor",
               "command": "crossdoc-atom:deleteAnchor"
+            },
+            {
+              "label": "crossdoc-atom testingShell",
+              "command": "crossdoc-atom:testingShell"
             }
           ]
         }
