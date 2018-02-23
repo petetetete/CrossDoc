@@ -13,8 +13,10 @@ function Insert()
         call inputsave()
         let name = input('Enter Comment: ')
         exe system("cdoc cc -t " . name)
-        call setline('.', curline . ' '. Anchor() . name)
-endfunction <&> 7879963^@hello
+        call setline('.', curline  .  ' '. Anchor() . ' ' . name)
+        exe ":call Comment()"
+        exe ":normal =="
+endfunction
 
 "Generate an Anchor from the pip command line tool.
 "Then return the cross-doc Anchor"
