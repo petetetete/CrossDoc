@@ -4,29 +4,51 @@
 (defun update-comments()
   (interactive)
 
-  ; Get lines of the current buffer
-  (setq curr-buffer-lines (split-string (buffer-string) "\n" t))
+  ; Save starting point and reset back to the beginning
+  (setq start-point (point))
+  (goto-char 0)
 
-  ; For each line in buffer
-  (dolist (elt curr-buffer-lines)
+  ; Go to each line with an anchor hook
+  (while (search-forward "<&>" nil t)
+    (progn
 
-    ; Save split line
-    (setq split-line (split-string elt " " t))
+      ; Save the anchor line
+      (setq split-line (split-string (thing-at-point 'line) " " t))
 
-    ; If we are at a CrossDoc comment
-    (if (string= "<&>" (nth 1 split-line))
-      (progn
-        ; Save the current lines comment text
-        (setq comment-text (mapconcat 'identity (nthcdr 3 split-line) " "))
+      ; Move forward off the anchor line
+      (forward-line)
+      (end-of-line)
 
-        ; Send off update-comment
-        (setq output (substring (shell-command-to-string (concat "cdoc uc -a " (nth 2 split-line) " -t \"" comment-text "\"")) 0 -1))
+      ; Create empty list to store lines in 
+      (setq text-list '())
 
-        ; Message CrossDoc output
-        (if (string= "fatal" (substring output 0 5))
-          (message output) ; Show output on fatal
-          ; Do nothing on else
-          )))))
+      ; While we are still in a comment
+      (while (nth 4 (syntax-ppss))
+        (progn
+
+          ; Append to the text-list as we go along
+          (add-to-list 'text-list
+
+            ; TODO: Currently, this just splits on spaces but it really should
+            ; use a better method because not all comments are followed by spaces
+            (mapconcat 'identity
+              (nthcdr 1 (split-string (substring (thing-at-point 'line t) 0 -1) " " t))
+              " ") t)
+
+          ; Move forward and to the end of the line
+          (forward-line)
+          (end-of-line)))
+
+      ; Save the final text and send off the CrossDoc command
+      (setq final-text (mapconcat 'identity text-list "\n"))
+      (setq output (substring (shell-command-to-string (concat "cdoc uc -a " (nth 2 split-line) " -t \"" final-text "\"")) 0 -1))
+
+      ; Catch errors
+      (if (string= "fatal" (substring output 0 5))
+        (message output)))) ; Show output on fatal
+
+  ; Move the cursor back to where it started
+  (goto-char start-point))
 
 
 (defun delete-comment ()
@@ -120,7 +142,7 @@
 ; Set command hot keys
 (global-set-key [f6] 'insert-comment)
 (global-set-key [f7] 'delete-comment)
-(global-set-key [f8] 'update-comment)
+(global-set-key [f8] 'update-comments)
 
 ; Add hooks
 (add-hook 'after-save-hook 'update-comments)
