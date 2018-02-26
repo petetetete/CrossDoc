@@ -32,18 +32,58 @@
 (defun delete-comment ()
   (interactive)
 
-  ; Get the current line position of cursor 
-  (setq curr-line (split-string (thing-at-point 'line )))
+  ; Save starting point and move to the end of the line
+  (setq start-point (point))
+  (end-of-line)
 
-  ; Check and see if we are in a CrossDoc comment
-  (if (string= "<&>" (cadr curr-line))
+  ; If we started in a comment
+  (if (nth 4 (syntax-ppss))
     (progn
-      (setq output (substring (shell-command-to-string (concat "cdoc dc -a " (nth 2 curr-line))) 0 -1))
-      (if (not (string= "fatal" (substring output 0 5)))
-        (kill-whole-line) ; If not fatal, delete line in text file
-        (message output))) ; Else if fatal show output
 
-    (message "fatal: not highlighting a CrossDoc comment")))
+      ; If we are not already looking at a CrossDoc comment,
+      ; iterate until we either find a CrossDoc comment, or the comments break
+      (if (not (string-match "<&>" (thing-at-point 'line)))
+
+        ; This is basically a do-while with the first two lines being the "do"
+        (while (progn
+
+          ; DO
+          (forward-line -1)
+          (end-of-line)
+
+          ; WHILE
+          (and
+            (nth 4 (syntax-ppss))
+            (not (string-match "<&>" (thing-at-point 'line)))))))
+
+      ; If we ended due to finding the anchor
+      (if (string-match "<&>" (thing-at-point 'line))
+        (progn
+
+          ; Get the line with the anchor in it and delete it
+          (setq curr-line (split-string (thing-at-point 'line)))
+          (setq output (substring (shell-command-to-string (concat "cdoc dc -a " (nth 2 curr-line))) 0 -1))
+
+          ; Parse delete output
+          (if (not (string= "fatal" (substring output 0 5)))
+            ; If not fatal, clear all comment lines
+            (while (progn
+              (kill-whole-line)
+              (end-of-line)
+              (nth 4 (syntax-ppss))))
+
+            ; Else if fatal show output
+            (message output)))
+
+        ; Else, we couldn't find the anchor
+        (progn
+          (goto-char start-point)
+          (message "fatal: cannot find anchor"))))
+
+    ; Else, we didn't even start in a comment
+    (progn
+      (goto-char start-point)
+      (message "fatal: not selecting a comment"))))
 
 
 (defun insert-comment ()
