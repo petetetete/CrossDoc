@@ -13,13 +13,10 @@ ANCHOR_HOOK = "<&> "
 
 
 def create_config(data):
-  """Create configuration file
-
-  Raises:
-    FileExistsError: Configuration file already exists"""
+  """Create configuration file"""
 
   if os.path.isfile(CONFIG_NAME):
-    raise FileExistsError("Config file already exists")
+    Logger.fatal("configuration file already exists")
 
   output = open(CONFIG_NAME, "w")
   json.dump(data, output, indent=4, separators=(',', ': '), sort_keys=True)
@@ -49,21 +46,18 @@ def store_is_valid(store):
 
 
 def find_comment(anchor, store=None):
-  """Find the comment in the specified store or any store
-
-  Raises:
-    ValueError: No valid comment stores found"""
+  """Find the comment in the specified store or any store"""
 
   config = get_config()
 
-  # If we weren't given a specific store to save to
+  # If we weren't given a specific store to search
   if store is None:
     curr_store = next((s for s in config["stores"] if store_is_valid(s)), None)
 
     if curr_store is None:
-      raise ValueError("No valid comment stores found")
+      Logger.fatal("no valid comment stores found")
 
-  # We were given a store to check
+  # We were given a store to search
   else:
     # TODO: Look into better store reference
     store = int(store)
@@ -71,20 +65,19 @@ def find_comment(anchor, store=None):
             store_is_valid(config["stores"][store])):
       curr_store = config["stores"][store]
     else:
-      raise ValueError("Store specified is invalid")
+      Logger.fatal("store specified is invalid")
 
   # Remove anchor hook if it exists
   if anchor.startswith(ANCHOR_HOOK):
     anchor = anchor[len(ANCHOR_HOOK):]
 
   # Find the matching anchor
-  all_files = os.listdir(os.fsencode(curr_store))
-  file_name = next((os.fsdecode(f) for f in all_files
-                    if os.fsdecode(f) == anchor + ANCHOR_EXTENSION), None)
+  all_files = [os.fsdecode(f) for f in os.listdir(os.fsencode(curr_store))]
+  matching_files = [f for f in all_files if f.startswith(anchor)]
 
   # If we found a matching anchor
-  if file_name is not None:
-    file_path = os.path.join(curr_store, file_name)
+  if len(matching_files) == 1:
+    file_path = os.path.join(curr_store, matching_files[0])
 
     # Get json from anchor
     anchor_json = []
@@ -94,9 +87,13 @@ def find_comment(anchor, store=None):
 
     return file_path, anchor_json
 
+  # If multiple anchors were found
+  elif len(matching_files) > 1:
+    Logger.fatal("ambiguous comment anchor, be more specific")
+
   # No anchor found
   else:
-    raise ValueError("Anchor not found")
+    Logger.fatal("comment anchor not found")
 
 
 def add_anchor_prefix(anchor):

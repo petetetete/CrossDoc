@@ -31,7 +31,7 @@ Steps to creating and uploading a Pip update:
    -  Upload to test.pypi.org:
       ``twine upload --repository testpypi dist/*``
 
-These steps assume that a .pypirc has already been setup that matches
+These steps assume that a ``~/.pypirc`` has already been setup that matches
 the following pattern:
 
 ::

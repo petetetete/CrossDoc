@@ -25,10 +25,8 @@ def project_init(name: "-name -n" = "Default Project Name",
     "stores": stores
   }
 
-  try:
-    create_config(config)
-  except FileExistsError:
-    Logger.fatal("configuration file already exists")
+  # Create config file
+  create_config(config)
 
   return CONFIG_NAME + " initialized in this directory"
 
@@ -111,10 +109,8 @@ def fetch_comment(anchor: "-anchor -a",
                   store: "-store -s" = None,
                   set: "-set" = DEFAULT_SET) -> "fetch-comment fc f":
 
-  try:
-    file_path, anchor_json = find_comment(anchor, store)
-  except ValueError:
-    Logger.fatal("comment anchor not found")
+  # Find the referenced comment
+  file_path, anchor_json = find_comment(anchor, store)
 
   found_set = next((s for s in anchor_json if s["set"] == set), None)
   if found_set:
@@ -127,10 +123,8 @@ def delete_comment(anchor: "-anchor -a",
                    store: "-store -s" = None,
                    set: "-set" = None) -> "delete-comment dc d":
 
-  try:
-    file_path, anchor_json = find_comment(anchor, store)
-  except ValueError:
-    Logger.fatal("comment anchor not found")
+  # Find the referenced comment
+  file_path, anchor_json = find_comment(anchor, store)
 
   # If no set specified, delete the whole comment
   if set is None:
@@ -165,10 +159,8 @@ def update_comment(anchor: "-anchor -a",
                    store: "-store -s" = None,
                    set: "-set" = DEFAULT_SET) -> "update-comment uc u":
 
-  try:
-    file_path, anchor_json = find_comment(anchor, store)
-  except ValueError:
-    Logger.fatal("comment anchor not found")
+  # Find the referenced comment
+  file_path, anchor_json = find_comment(anchor, store)
 
   set_i = next((i for i, s in enumerate(anchor_json)
                 if s["set"] == set), None)
