@@ -10,12 +10,16 @@
         "command": "crossdoc-atom:reverseText"
       },
       {
-        "label": "crossdoc-atom insertAnchor",
-        "command": "crossdoc-atom:insertAnchor"
+        "label": "crossdoc-atom createComment",
+        "command": "crossdoc-atom:createComment"
       },
       {
-        "label": "crossdoc-atom deleteAnchor",
-        "command": "crossdoc-atom:deleteAnchor"
+        "label": "crossdoc-atom deleteComment",
+        "command": "crossdoc-atom:deleteComment"
+      },
+      {
+        "label": "crossdoc-atom updateComment",
+        "command": "crossdoc-atom:updateComment"
       },
       {
         "label": "crossdoc-atom testingShell",
@@ -39,12 +43,16 @@
               "command": "crossdoc-atom:reverseText"
             },
             {
-              "label": "crossdoc-atom insertAnchor",
-              "command": "crossdoc-atom:insertAnchor"
+              "label": "crossdoc-atom createComment",
+              "command": "crossdoc-atom:createComment"
             },
             {
-              "label": "crossdoc-atom deleteAnchor",
-              "command": "crossdoc-atom:deleteAnchor"
+              "label": "crossdoc-atom deleteComment",
+              "command": "crossdoc-atom:deleteComment"
+            },
+            {
+              "label": "crossdoc-atom updateComment",
+              "command": "crossdoc-atom:updateComment"
             },
             {
               "label": "crossdoc-atom testingShell",

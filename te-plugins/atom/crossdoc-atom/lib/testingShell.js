@@ -13,7 +13,7 @@
               console.log('stdout', stdout);
           });
 
-  const child2 = execFile('cdoc', ['cc', '-text', 'testText', '-store', '1', '-set', '1'], (error, stdout, stderr) =>
+  const child2 = execFile('cdoc', ['cc', '-text', 'testTextinAtom'], (error, stdout, stderr) =>
           {
               if (error)
               {
