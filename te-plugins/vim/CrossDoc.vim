@@ -7,7 +7,8 @@ function Init()
     echo "There already a crossdoc store in dictionary"
   endtry
 endfunction
-" <&> d10b42e201b8643a"<&>
+" <&> d10b42e201b8643a
+"<&>
 "This fucntion insert the cross-doc Creaete comment line to the code"
 "Todo: Need to work on the inerting it into cross docs"
 function Insert()
@@ -29,21 +30,31 @@ function Anchor()
         let anc= system("cross-doc generate-anchor")
         return anc
 endfunction
-
-
 "This function looks for generate-anchor in the current curser line
 "Then delete the Whole line
 "Laslty add a blank line to keep the spacing
 function Delete()
-  let curline = getline('.')
-  if curline == "<&>"
-    echo "has anchor"
-  endif
+  let cls = split(getline('.'))
+  let lislen = len(cls)
+  let i = 0
+  let curlispos = 0
+  while i < lislen 
+    if cls[i] == "<&>"
+      let curlispos = i+1
+      echo "Deleted CrossDoc Comment"
+    endif
+    let i += 1
+  endwhile
+  let anclist = cls[curlispos]
+  try
+    system("cdoc dc -anchor " . anclist)
+    exe ":normal dd"
+  catch
+    echo "Not a CrossDoc Comment"
+  endtry
        " :s/<&>/
-endfunctionfunction Update(ucomment)
-        :exe system("cdoc uc" . a:ucomment)
 endfunction
-
+" <&> be6102de405995fc
 "Comment() will search for the file type and add the correct comment Symbol
 function! Comment()
   let ext = tolower(expand('%:e'))
