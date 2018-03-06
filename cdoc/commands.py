@@ -45,36 +45,8 @@ def create_comment(text: "-text -t",
                    anchor: "-anchor -a" = None,
                    set: "-set" = DEFAULT_SET) -> "create-comment cc c":
 
-  config = get_config()
-  if len(config["stores"]) == 0:
-    Logger.fatal("no comment stores to create to")
-
-  # If we weren't given a specific store to save to
-  if store is None:
-
-    # Find first store that exists
-    i = 0
-    while (i < len(config["stores"]) and
-           not store_is_valid(config["stores"][i])):
-      i += 1
-
-    # We couldn't find a valid store
-    if i >= len(config["stores"]):
-      Logger.fatal("no valid comment stores found")
-
-    curr_store = config["stores"][i]
-
-  # We were given a store to check
-  else:
-    # TODO: Look into better store reference
-    if (int(store) < len(config["stores"]) and
-            store_is_valid(config["stores"][int(store)])):
-      curr_store = config["stores"][int(store)]
-    else:
-      curr_store = ""
-      Logger.fatal("store specified is invalid")
-
   # Determine the anchor to use
+  curr_store = find_store(store)
   anchor_to_use = generate_anchor() if anchor is None else anchor
 
   # Remove anchor hook from path if present
