@@ -12,15 +12,30 @@ endfunction
 "This fucntion insert the cross-doc Creaete comment line to the code"
 "Todo: Need to work on the inerting it into cross docs"
 function Insert()
-  let anc = system("cdoc ga")
+  let i = 0
         normal O
         let curline = getline('.')
         call inputsave()
         let name = input('Enter Comment: ')
-        exe system("cdoc cc -t " . name)
-        call setline('.', curline  .  ' '. anc . ' ' . name)
+        let g = system('cdoc cc -t ' . name)
+        let commax = split(g)
+        call setline('.', curline  .  ' '. commax[0] . ' ' . commax[1])
         exe ":call Comment()"
         exe ":normal =="
+  exe ":normal o"
+  let comlen = len(g)
+  let commaxx = split(name)
+  while i < comlen
+    try
+      exe ":normal A".' ' . commaxx[i]
+      if commaxx[i] == '\n'
+        exe ":normal o"
+      endif 
+    catch 
+      echo ""
+    endtry  
+    let i += 1
+  endwhile
 endfunction
 
 "Generate an Anchor from the pip command line tool.
@@ -30,6 +45,7 @@ function Anchor()
         let anc= system("cross-doc generate-anchor")
         return anc
 endfunction
+
 "This function looks for generate-anchor in the current curser line
 "Then delete the Whole line
 "Laslty add a blank line to keep the spacing
@@ -42,17 +58,48 @@ function Delete()
     if cls[i] == "<&>"
       let curlispos = i+1
       echo "Deleted CrossDoc Comment"
+      exe ":normal dd"
+      let u = 0
+      try
+        while cls[u] == Comment()
+          exe ":normal dd"
+          let u += 1
+        endwhile
+        exe ":normal dd"
+      catch
+      endtry
     endif
     let i += 1
   endwhile
   let anclist = cls[curlispos]
   try
-    system("cdoc dc -anchor " . anclist)
-    exe ":normal dd"
+    exe system("cdoc dc -anchor " . anclist)
   catch
-    echo "Not a CrossDoc Comment"
   endtry
-       " :s/<&>/
+endfunction
+
+function Update(ucomment)
+  while i < lislen 
+      if cls[i] == "<&>"
+        let curlispos = i+1
+        echo "Update CrossDoc Comment"
+        exe ":normal dd"
+        let u = 0
+        try
+          while cls[u] == Comment()
+            exe ":normal dd"
+            let u += 1
+          endwhile
+          exe ":normal dd"
+        catch
+        endtry
+      endif
+      let i += 1
+    endwhile
+endfunction
+
+function Update(ucomment)
+        :exe system("cdoc uc" . a:ucomment)
 endfunction
 " <&> be6102de405995fc
 "Comment() will search for the file type and add the correct comment Symbol
