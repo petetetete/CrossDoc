@@ -7,6 +7,7 @@ function Init()
     echo "There already a crossdoc store in dictionary"
   endtry
 endfunction
+
 " <&> d10b42e201b8643a
 "<&>
 "This fucntion insert the cross-doc Creaete comment line to the code"
@@ -36,10 +37,7 @@ function Insert()
     endtry  
     let i += 1
   endwhile
-endfunction
-
-"Generate an Anchor from the pip command line tool.
-"Then return the cross-doc Anchor"
+endfunction "the cross-doc Anchor"
 
 function Anchor()
         let anc= system("cross-doc generate-anchor")
@@ -77,31 +75,10 @@ function Delete()
   catch
   endtry
 endfunction
-
-function Update(ucomment)
-  while i < lislen 
-      if cls[i] == "<&>"
-        let curlispos = i+1
-        echo "Update CrossDoc Comment"
-        exe ":normal dd"
-        let u = 0
-        try
-          while cls[u] == Comment()
-            exe ":normal dd"
-            let u += 1
-          endwhile
-          exe ":normal dd"
-        catch
-        endtry
-      endif
-      let i += 1
-    endwhile
-endfunction
-
 function Update(ucomment)
         :exe system("cdoc uc" . a:ucomment)
 endfunction
-" <&> be6102de405995fc
+
 "Comment() will search for the file type and add the correct comment Symbol
 function! Comment()
   let ext = tolower(expand('%:e'))
@@ -123,6 +100,14 @@ function! Uncomment()
     silent s:^\/\/::g
   elseif ext == 'vim'
     silent s:^\"::g
+  endif
+endfunction
+
+function Test()
+  let i = 0 
+  let cls = split(getline('.'))
+  if cls[i] == Comment()
+    exe ":normal dd"
   endif
 endfunction
 
