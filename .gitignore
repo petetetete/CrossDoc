@@ -10,11 +10,10 @@ cdoc-test
 test_project
 cdoc-config.json
 
-# Ignore misc files
+# Ignore text editor auto-save files
 .#*
 \#*
-te-plugins/vim/.CrossDoc.vim.un~
-te-plugins/vim/CrossDoc.vim~
-te-plugins/vim/.CrossDoc.vim.swo
-te-plugins/vim/.CrossDoc.vim.swp
-te-plugins/vim/.CrossDoc.vim.swn
+*.sw[klmnop]
+
+# Ignore misc files
+*.lnk
