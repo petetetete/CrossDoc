@@ -12,18 +12,6 @@ ANCHOR_EXTENSION = ".json"
 ANCHOR_HOOK = "<&> "
 
 
-def create_config(data):
-  """Create configuration file"""
-
-  if os.path.isfile(CONFIG_NAME):
-    Logger.fatal("configuration file already exists")
-
-  output = open(CONFIG_NAME, "w")
-  json.dump(data, output, indent=4, separators=(',', ': '), sort_keys=True)
-
-  return
-
-
 def get_config():
   """Trys to open the config file"""
 

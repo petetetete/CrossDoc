@@ -5,7 +5,7 @@ import hashlib
 import os
 
 # Our module imports
-from .config_helpers import *
+from .store_helpers import *
 from .logging import Logger
 
 # The parsing uses parameter annotations to match command line arguments
@@ -26,7 +26,11 @@ def project_init(name: "-name -n" = "Default Project Name",
   }
 
   # Create config file
-  create_config(config)
+  if os.path.isfile(CONFIG_NAME):
+    Logger.fatal("configuration file already exists")
+
+  output = open(CONFIG_NAME, "w")
+  json.dump(config, output, indent=4, separators=(',', ': '), sort_keys=True)
 
   return CONFIG_NAME + " initialized in this directory"
 
