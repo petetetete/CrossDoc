@@ -1,6 +1,7 @@
 # Python Standard Library imports
 import os
 import json
+import urllib.request
 
 # Our module imports
 from .logging import Logger
@@ -10,6 +11,7 @@ CONFIG_NAME = "cdoc-config.json"
 DEFAULT_SET = "No Set"
 ANCHOR_EXTENSION = ".json"
 ANCHOR_HOOK = "<&> "
+WIKI_API_FILE = "api.php"
 
 
 def create_config(data, override=False):
@@ -61,10 +63,34 @@ def find_config_path(base):
   return None
 
 
+def store_is_remote(store):
+  """Determine whether a given store is remote"""
+
+  return store.startswith("http")
+
+
 def store_is_valid(store):
   """Determine whether a given store is valid"""
 
+  if store_is_remote(store):
+    try:
+      urllib.request.urlopen(os.path.join(store, WIKI_API_FILE))
+      return True
+    except urllib.error.HTTPError:
+      return False
+
   return os.path.isdir(store)
+
+
+def wiki_request(store, **params):
+  """Build a network request for a given store"""
+
+  params["format"] = "json"
+  url = "{}?{}".format(os.path.join(store, WIKI_API_FILE),
+                       urllib.parse.urlencode(params))
+
+  res = urllib.request.urlopen(url)
+  return json.loads(res.read().decode("utf-8"))
 
 
 def find_store(store=None, nth_valid=1, raise_errors=False):
@@ -149,13 +175,40 @@ def find_comment(anchor, store=None):
     except ValueError:
       Logger.fatal("comment anchor not found")
 
-    # Find the matching anchor
-    all_files = [os.fsdecode(f) for f in os.listdir(os.fsencode(curr_store))]
-    matching_files = [f for f in all_files if f.startswith(anchor)]
+    # Get the matching anchors #
 
-    # If we found a matching anchor
-    if len(matching_files) == 1:
-      file_path = os.path.join(curr_store, matching_files[0])
+    if not store_is_remote(curr_store):  # If we are looking at a local store
+
+      # Find the matching anchor
+      anchors = [os.fsdecode(f) for f in os.listdir(os.fsencode(curr_store))]
+      matching_anchors = [f for f in anchors if f.startswith(anchor)]
+
+    else:  # If we are looking at a remote store
+
+      try:
+        res_data = wiki_request(curr_store, action="query",
+                                list="allpages", apprefix="&")
+      except Exception:
+        continue
+
+      anchors = res_data["query"]["allpages"]
+      matching_anchors = [a for a in anchors
+                          if a["title"][1:].startswith(anchor)]
+
+    # If multiple anchors were found
+    if len(matching_anchors) > 1:
+      Logger.fatal("ambiguous comment anchor, be more specific")
+
+    # If no anchors were found
+    if len(matching_anchors) == 0:
+      nth_store += 1
+      continue
+
+    # Get the anchor's json (or create it if needed) #
+
+    if not store_is_remote(curr_store):  # If we are looking at a local store
+
+      file_path = os.path.join(curr_store, matching_anchors[0])
 
       # Get json from anchor
       anchor_json = []
@@ -163,15 +216,41 @@ def find_comment(anchor, store=None):
         with open(file_path) as file:
           anchor_json = json.load(file)
 
+      # TODO: Modify to use some other method than file_path
       return file_path, anchor_json
 
-    # If multiple anchors were found
-    elif len(matching_files) > 1:
-      Logger.fatal("ambiguous comment anchor, be more specific")
+    else:  # If we are looking at a remote store
 
-    # No anchor found
-    else:
-      nth_store += 1
+      try:
+        wikitext = wiki_request(curr_store, action="parse", prop="wikitext",
+                                pageid=matching_anchors[0]["pageid"])
+      except Exception:
+        continue
+
+      wikitext = wikitext["parse"]["wikitext"]["*"]
+      anchor_json = []
+      curr_anchor = {}
+
+      # TODO: There has to be a way to parse this better
+      for line in wikitext.split("\n"):
+
+        if line.startswith("=="):
+          if len(curr_anchor):
+            curr_anchor["comment"] = "\n".join(curr_anchor["comment"])
+            anchor_json.append(curr_anchor)
+            curr_anchor = {}
+
+          curr_anchor["set"] = line.lstrip("=").rstrip("=").strip()
+          curr_anchor["comment"] = []
+
+        elif len(curr_anchor):
+          curr_anchor["comment"] += [line]
+
+      if len(curr_anchor):
+        curr_anchor["comment"] = "\n".join(curr_anchor["comment"])
+        anchor_json.append(curr_anchor)
+
+      return None, anchor_json
 
 
 def add_anchor_prefix(anchor):
