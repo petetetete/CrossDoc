@@ -12,6 +12,16 @@ ANCHOR_EXTENSION = ".json"
 ANCHOR_HOOK = "<&> "
 
 
+def create_config(data, override=False):
+
+  # Create config file
+  if not override and os.path.isfile(CONFIG_NAME):
+    Logger.fatal("configuration file already exists")
+
+  output = open(CONFIG_NAME, "w")
+  json.dump(data, output, indent=4, separators=(',', ': '), sort_keys=True)
+
+
 def get_config():
   """Trys to open the config file"""
 
@@ -25,6 +35,30 @@ def get_config():
     data = json.load(file)
 
   return data
+
+
+def find_config_path(base):
+  """Recursively find path to the config file if it exists"""
+
+  # Ensure that the given path is a directory
+  curr_path = base if os.path.isdir(base) else os.path.dirname(base)
+
+  # Iterate up from the given directory looking for the file
+  while True:
+
+    # If we found the config
+    curr_check = os.path.join(curr_path, "cdoc-config.json")
+    if os.path.isfile(curr_check):
+      return curr_check
+
+    # Break when we've hit the root
+    if os.path.dirname(curr_path) == curr_path:
+      break
+
+    # Pop off a directory
+    curr_path = os.path.dirname(curr_path)
+
+  return None
 
 
 def store_is_valid(store):
@@ -147,27 +181,3 @@ def add_anchor_prefix(anchor):
     return anchor
   else:
     return ANCHOR_HOOK + anchor
-
-
-def find_config_path(base):
-  """Recursively find path to the config file if it exists"""
-
-  # Ensure that the given path is a directory
-  curr_path = base if os.path.isdir(base) else os.path.dirname(base)
-
-  # Iterate up from the given directory looking for the file
-  while True:
-
-    # If we found the config
-    curr_check = os.path.join(curr_path, "cdoc-config.json")
-    if os.path.isfile(curr_check):
-      return curr_check
-
-    # Break when we've hit the root
-    if os.path.dirname(curr_path) == curr_path:
-      break
-
-    # Pop off a directory
-    curr_path = os.path.dirname(curr_path)
-
-  return None
