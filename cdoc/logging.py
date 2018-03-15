@@ -19,7 +19,10 @@ class Logger:
   def usage(command=None):
     """Logs the usage message for the function that called this (non-ending)"""
 
+    # Get the name used to call cross-doc (and try to correct it)
     name = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+    name = "cdoc" if name == "__main__" else name.replace("-script", "")
+
     output = "usage: "
 
     # Find the function that wants its usage message printed
@@ -42,19 +45,27 @@ class Logger:
       for name, param in calleeParams:
         required = param.default == Parameter.empty
         takesList = isinstance(param.default, list)
+        takesBool = isinstance(param.default, bool)
 
         output += "[" if not required else ""
-        output += param.annotation.split()[0] + " "
-        output += "<list>" if takesList else "<value>"
+        output += param.annotation.split()[0]
+        output += "" if takesBool else " <list>" if takesList else " <value>"
         output += "] " if not required else " "
 
     # Print the default usage message
     else:
-      commands = map((lambda a: signature(a).return_annotation.split()[0]),
-                     cdoc.registration.commands)
+      commands = [signature(a).return_annotation.split()[0]
+                  for a in cdoc.registration.commands]
 
-      output += name + " <command>\n\nAll CrossDoc commands:\n  "
-      output += "\n  ".join(commands)
+      output += name + " <command>\n\nAll CrossDoc commands:\n\n  "
+      output += "\n  ".join(commands) + "\n\n"
+
+      output += "Get command specific usage text with the \"--help\" flag:\n"
+      output += "\n  -       = parameter identifier"
+      output += "\n  --      = flag identifier (boolean, no input required)"
+      output += "\n  []      = an optional command parameter"
+      output += "\n  <value> = to be replaced with single input"
+      output += "\n  <list>  = to be replaced many inputs"
 
     Logger.standard(output)
     return

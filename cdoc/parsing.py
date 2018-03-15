@@ -85,6 +85,10 @@ def process_command(argv):
       if isinstance(param.default, list):
         finalParams.append(matchingArg)
 
+      # Defautl expects a boolean, set to true if the flag exists
+      elif isinstance(param.default, bool):
+        finalParams.append(True)
+
       # Default expects a single, and they gave it to us, so pass it along
       elif len(matchingArg) > 0:
         finalParams.append(matchingArg[0])
