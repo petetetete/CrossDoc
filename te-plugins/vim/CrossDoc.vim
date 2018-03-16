@@ -1,4 +1,3 @@
-
 function Init()
   try
   exe system("mkdir " . expand('%:r') . '_CDoc_Store')
@@ -8,9 +7,6 @@ function Init()
   endtry
 endfunction
 
-" <&> d10b42e201b8643a
-"<&>
-"This fucntion insert the cross-doc Creaete comment line to the code"
 "Todo: Need to work on the inerting it into cross docs"
 function Insert()
   let i = 0
@@ -37,7 +33,7 @@ function Insert()
     endtry  
     let i += 1
   endwhile
-endfunction "the cross-doc Anchor"
+endfunction 
 
 function Anchor()
         let anc= system("cross-doc generate-anchor")
@@ -75,9 +71,50 @@ function Delete()
   catch
   endtry
 endfunction
-function Update(ucomment)
-        :exe system("cdoc uc" . a:ucomment)
+
+function Update()
+        ":exe system("cdoc uc" . a:ucomment)
+  let clu = split(getline('.'))
+  let listlen = len(clu)
+  let n = 0
+  let i = 0
+  let h = 0
+  let h = ""
+  let j = line('$')
+  "let emline = exe :/^$"
+  exe ":normal gg"
+  while i < j
+    try
+    while n <= listlen
+      if clu[n] == "<&>"
+        echo clu[n + 1]
+        while strlen(getline('.')) != 0
+          exe ":call Uncomment()"
+          let p ='' .  getline('.')
+          exe ":call Comment()"
+          let h = h . p
+          exe ":normal j"
+          echo getline('.')
+        endwhile  
+        echo h
+        exe system("cdoc uc -anchor ". clu[n + 1] . " -text " . h )
+      endif
+      let h = ""
+      let p = ""
+      let n += 1
+    endwhile
+  catch
+  endtry
+    let clu = split(getline('.'))
+    let n = 0
+    exe ":normal j"
+    let i += 1
+  endwhile
 endfunction
+" <&> f0f999d4e4af5a1f
+" "heklsjfdlks lksdjfl \n
+" ksjdflk slkfdj \n
+" sjdflk jsdklfjklsd Brian "
 
 "Comment() will search for the file type and add the correct comment Symbol
 function! Comment()
@@ -90,6 +127,10 @@ function! Comment()
     silent s:^:\":g
   endif
 endfunction
+" <&> 2144955e3ee89ab6
+" "ksld fkls skljf \n
+" fskdljf lsj kl \n
+" ksjdflksj Saganey"
 
 "Uncomment() search for the file type and remove the correct comment Symbol
 function! Uncomment()
