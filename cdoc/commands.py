@@ -5,7 +5,7 @@ import hashlib
 import os
 
 # Our module imports
-from .config_helpers import *
+from .store_helpers import *
 from .logging import Logger
 
 # The parsing uses parameter annotations to match command line arguments
@@ -17,18 +17,47 @@ from .logging import Logger
 # simply take the first value the user gives
 
 
-def project_init(name: "-name -n" = "Default Project Name",
+def project_init(name: "-name -n" = "Default CrossDoc Project Name",
                  stores: "-stores -s" = []) -> "init i":
 
   config = {
     "project_name": name,
-    "stores": stores
+    "stores": [os.path.normpath(s) for s in stores]
   }
 
   # Create config file
   create_config(config)
 
+  # Create the requested stores
+  for store in config["stores"]:
+    create_store(os.path.basename(store), os.path.dirname(store))
+
   return CONFIG_NAME + " initialized in this directory"
+
+
+def create_store(name: "-name -n" = "cdoc-store",
+                 path: "-path -p" = os.getcwd()) -> "create-store cs":
+
+  # Get full path from given info
+  # TODO: Consider error checking here
+  full_path = os.path.normpath(os.path.join(path, name))
+
+  # If local, create directory
+  if not os.path.exists(full_path):
+    try:
+      os.makedirs(full_path)
+    except OSError:
+      logger.fatal("unable to create directory")
+
+  # Get current config settings and add store
+  config = get_config()
+  if (full_path not in [os.path.normpath(s) for s in config["stores"]]):
+    config["stores"].append(full_path)
+
+  # Update the config file
+  create_config(config, True)
+
+  return "store created at \"" + full_path + "\""
 
 
 def generate_anchor() -> "generate-anchor ga g":
