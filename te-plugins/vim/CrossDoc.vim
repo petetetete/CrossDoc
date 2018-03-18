@@ -111,10 +111,6 @@ function Update()
     let i += 1
   endwhile
 endfunction
-" <&> f0f999d4e4af5a1f
-" "heklsjfdlks lksdjfl \n
-" ksjdflk slkfdj \n
-" sjdflk jsdklfjklsd Brian "
 
 "Comment() will search for the file type and add the correct comment Symbol
 function! Comment()
@@ -127,10 +123,6 @@ function! Comment()
     silent s:^:\":g
   endif
 endfunction
-" <&> 2144955e3ee89ab6
-" "ksld fkls skljf \n
-" fskdljf lsj kl \n
-" ksjdflksj Saganey"
 
 "Uncomment() search for the file type and remove the correct comment Symbol
 function! Uncomment()
