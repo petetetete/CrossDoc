@@ -6,6 +6,24 @@ import os
 ANCHOR_HOOK = "<&> "
 
 
+class InitCommand(sublime_plugin.TextCommand):
+
+  def run(self, edit):
+    v = self.view
+
+    # Get current working directory
+    cwd = os.path.dirname(v.file_name())
+
+    # Initialize repository in the cwd
+    output = check_output("cdoc init",
+                          shell=True, cwd=cwd).decode("utf-8").rstrip()
+
+    # Catch command line errors
+    if output.startswith("fatal"):
+      print(output)
+      return
+
+
 class InsertCommentCommand(sublime_plugin.TextCommand):
 
   def run(self, edit):

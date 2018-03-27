@@ -1,5 +1,9 @@
 [
     {
+        "caption": "CrossDoc: Initialize Repository",
+        "command": "init"
+    },
+    {
         "caption": "CrossDoc: Insert Comment",
         "command": "insert_comment"
     },
