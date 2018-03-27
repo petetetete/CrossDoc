@@ -138,11 +138,19 @@
     ; Else if fatal: forward the fatal message to the console
     (message output)))
 
+(defun init()
+  (interactive)
+
+  (setq output (substring (shell-command-to-string "cdoc init") 0 -1))
+  (if (string= "fatal" (substring output 0 5))
+    (message output)))
+
 
 ; Set command hot keys
 (global-set-key [f6] 'insert-comment)
 (global-set-key [f7] 'delete-comment)
 (global-set-key [f8] 'update-comments)
+(global-set-key [f9] 'init)
 
 ; Add hooks
 (add-hook 'after-save-hook 'update-comments)
