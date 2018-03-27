@@ -2,6 +2,7 @@
 import os
 import json
 import urllib.request
+import re
 
 # Our module imports
 from .logging import Logger
@@ -229,26 +230,24 @@ def find_comment(anchor, store=None):
 
       wikitext = wikitext["parse"]["wikitext"]["*"]
       anchor_json = []
-      curr_anchor = {}
 
-      # TODO: There has to be a way to parse this better
+      # Parse the wikitext into json
       for line in wikitext.split("\n"):
 
         if line.startswith("=="):
-          if len(curr_anchor):
-            curr_anchor["comment"] = "\n".join(curr_anchor["comment"])
-            anchor_json.append(curr_anchor)
-            curr_anchor = {}
+          anchor_json.append({})
+          anchor_json[-1]["set"] = line.strip("=").strip()
+          anchor_json[-1]["comment"] = []
 
-          curr_anchor["set"] = line.lstrip("=").rstrip("=").strip()
-          curr_anchor["comment"] = []
+        elif len(anchor_json):
+          anchor_json[-1]["comment"] += [line]
 
-        elif len(curr_anchor):
-          curr_anchor["comment"] += [line]
+      # Format each comment string (removing \n's that are solo)
+      for item in anchor_json:
 
-      if len(curr_anchor):
-        curr_anchor["comment"] = "\n".join(curr_anchor["comment"])
-        anchor_json.append(curr_anchor)
+        # TODO: Consider whether we should consolidate new lines
+        item["comment"] = re.sub("(?<!\\n)\\n(?!\\n)", " ",
+                                 "\n".join(item["comment"]))
 
       return None, anchor_json
 
