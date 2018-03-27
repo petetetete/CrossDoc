@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# TODO: Remove
+# Just an example
+echo "CrossDoc custom pre-commit hook message [TEST]"
+
+# Currently just interprets the "pip-less" module
+# Passes the names of the changed files to reduce file searching
+python -m cdoc hc -f $(git diff --cached --name-only --diff-filter=ACM)
+
+# Stop commit from executing (non-zero exitgit)
+exit 1

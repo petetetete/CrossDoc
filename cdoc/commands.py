@@ -179,3 +179,9 @@ def update_comment(anchor: "-anchor -a",
 
   return ("set \"" + anchor_json[set_i]["set"] + "\" at \"" +
           add_anchor_prefix(anchor) + "\" updated")
+
+
+def hide_comments(files: "-files -f" = []) -> "hide-comments hc h":
+
+  # TODO: Implement
+  Logger.standard(files)
