@@ -1,0 +1,19 @@
+{
+  "name": "crossdoc-atom",
+  "main": "./lib/crossdoc-atom",
+  "version": "0.0.0",
+  "description": "CrossDoc's Atom Plugin",
+  "keywords": [
+  ],
+  "activationCommands": {
+    "atom-workspace": "crossdoc-atom:toggle",
+    "atom-workspace": "crossdoc-atom:reverseText"
+  },
+  "repository": "https://github.com/atom/crossdoc-atom",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+  }
+}
