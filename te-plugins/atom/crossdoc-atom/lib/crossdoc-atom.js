@@ -30,6 +30,10 @@ export default {
     this.subscriptions.add(atom.commands.add('atom-workspace', {
       'crossdoc-atom:reverseText': () => this.reverseText()
     }));
+    //Register initCrossdoc command
+    this.subscriptions.add(atom.commands.add('atom-workspace', {
+      'crossdoc-atom:initCrossdoc': () => this.initCrossdoc()
+    }));
     //Register createComment command
     this.subscriptions.add(atom.commands.add('atom-workspace', {
       'crossdoc-atom:createComment': () => this.createComment()
@@ -66,8 +70,6 @@ export default {
 
   createComment() {
 
-    this.initCrossdoc() //runs cdoc init in shell to ensure we have a config
-
     let editor
 
     //handling cdoc shell commands through Node.js
@@ -89,22 +91,25 @@ export default {
                 if (editor = atom.workspace.getActiveTextEditor())
                 {
 
-                  //let selection = editor.getSelectedText()
-                  editor.deleteLine()
-                  editor.moveToBeginningOfScreenLine()
+                  //finding column indent
+                  let cursor
+                  let screenColumn
+                  cursor = editor.getLastCursor()
+                  screenColumn = cursor.getScreenColumn()
 
+                  //inserting anchor comment
                   editor.toggleLineCommentsInSelection()
                   editor.insertText(temp)
+                  editor.backspace()
 
                   //adding in the user comment space below cdoc anchor
-                  editor.insertNewline()
-                  editor.moveUp(1)
                   let i
                   for(i = 0; i < 2; i++) //loop so we can modify easier, if move wanted
                   {
-                    editor.toggleLineCommentsInSelection()
                     editor.insertNewline()
+                    editor.toggleLineCommentsInSelection()
                   }
+
 
                 }
 
@@ -116,24 +121,59 @@ export default {
   //how function works;
   deleteComment() {
 
-    this.initCrossdoc()
-
     let editor
     let anchorToStore
     if (editor = atom.workspace.getActiveTextEditor())
     {
-      editor.moveToBeginningOfScreenLine()  //move to beginning of line (selection and or cursor)
-      editor.moveToFirstCharacterOfLine() //move to first character seen (should be beginning of comment characters)
-      editor.moveToEndOfWord() //moving past the comment lines
-      editor.moveRight(1) //move toward next word
-      editor.moveToEndOfWord() //move past cdoc anchor icon
-      editor.moveRight(1) //move toward next word (should be cdoc anchor number)
-      editor.selectToEndOfWord() //select to the end of our anchor number
-      anchorToStore = editor.getSelectedText() //grab that anchorNumber and store it
-      editor.toggleLineCommentsInSelection() //toggle the comment off
-      editor.deleteLine() //delete anchor line
-      editor.deleteLine()
-      editor.deleteLine()
+
+      //initialization
+      let anchorTag = "<&>"
+
+      editor.moveToFirstCharacterOfLine()
+      editor.selectToEndOfWord()
+      let commentMarker = editor.getSelectedText()
+      let flag = 0 //escape flag
+      let parsedText
+      while(flag == 0)
+      {
+        editor.moveToFirstCharacterOfLine()
+        editor.moveToEndOfWord()
+        editor.moveRight(1) //move towards next word
+        editor.selectToEndOfWord()
+        parsedText = editor.getSelectedText()
+
+        if(parsedText == anchorTag) //if we found our nearest anchor
+        {
+          flag = 1
+          editor.moveRight(2) //deselect and move close to the anchortag
+          editor.selectToEndOfWord()
+          anchorToStore = editor.getSelectedText()
+        }
+        else //if not keep looking upwards
+        {
+          editor.moveUp(1)
+        }
+
+      }//ends while loop
+
+      //deletion process (once we found our anchor tag we must be at top of comment)
+      flag = 0
+      while(flag == 0)
+      {
+        editor.moveToFirstCharacterOfLine()
+        editor.selectToEndOfWord()
+        parsedText = editor.getSelectedText()
+
+        if(parsedText == commentMarker)//we are in a comment still
+        {
+          editor.deleteLine()
+        }
+        else //no longer in comments
+        {
+          flag = 1 //allow escape
+        }
+      }
+
     }
 
     console.log('anchorToStore = ', anchorToStore)
@@ -155,32 +195,63 @@ export default {
 
   updateComment()
   {
-    this.initCrossdoc()
 
     let editor
     let anchorToStore
     let commentToStore = '' //give starting value or undefined will be in text
+
     if (editor = atom.workspace.getActiveTextEditor())
     {
-      editor.moveToBeginningOfScreenLine()  //move to beginning of line (selection and or cursor)
-      editor.moveToFirstCharacterOfLine() //move to first character seen (should be beginning of comment characters)
-      editor.moveToEndOfWord() //moving past the comment lines
-      editor.moveRight(1) //move toward next word
-      editor.moveToEndOfWord() //move past cdoc anchor icon
-      editor.moveRight(1) //move toward next word (should be cdoc anchor number)
-      editor.selectToEndOfWord() //select to the end of our anchor number
-      anchorToStore = editor.getSelectedText() //grab that anchorNumber and store it
+      //initialization
+      let anchorTag = "<&>"
 
-
-      //now to find the comments
-      let i
-      for(i = 0; i < 2; i++) //loop the number of comment lines to grab, find way to calc and this will work for multiline
+      editor.moveToFirstCharacterOfLine()
+      editor.selectToEndOfWord()
+      let commentMarker = editor.getSelectedText()
+      let flag = 0 //escape flag
+      let parsedText
+      while(flag == 0)
       {
-        //editor.moveDown(1)
+        editor.moveToFirstCharacterOfLine()
         editor.moveToEndOfWord()
-        editor.moveRight(1)
-        editor.selectToEndOfLine()
-        commentToStore += editor.getSelectedText() //store it
+        editor.moveRight(1) //move towards next word
+        editor.selectToEndOfWord()
+        parsedText = editor.getSelectedText()
+
+        if(parsedText == anchorTag) //if we found our nearest anchor
+        {
+          flag = 1
+          editor.moveRight(1) //deselect and move close to the anchortag
+          editor.selectToEndOfWord()
+          anchorToStore = editor.getSelectedText()
+        }
+        else //if not keep looking upwards
+        {
+          editor.moveUp(1)
+        }
+
+      }//ends while loop
+
+      //collection of updatable comments process (once we found our anchor tag we must be at top of comment)
+      editor.moveDown(1) //move past the anchor line
+      flag = 0
+      while(flag == 0)
+      {
+        editor.moveToFirstCharacterOfLine()
+        editor.selectToEndOfWord()
+        parsedText = editor.getSelectedText()
+
+        if(parsedText == commentMarker)//we are in a comment still
+        {
+          editor.moveRight(1)
+          editor.selectToEndOfLine()
+          commentToStore += editor.getSelectedText() //store comment text
+        }
+        else //no longer in comments
+        {
+          flag = 1 //allow escape
+        }
+        editor.moveDown(1) //look at next line
       }
 
     }

@@ -10,6 +10,10 @@
         "command": "crossdoc-atom:reverseText"
       },
       {
+        "label": "crossdoc-atom initCrossdoc",
+        "command": "crossdoc-atom:initCrossdoc"
+      },
+      {
         "label": "crossdoc-atom createComment",
         "command": "crossdoc-atom:createComment"
       },
@@ -41,6 +45,10 @@
             {
               "label": "reverseText",
               "command": "crossdoc-atom:reverseText"
+            },
+            {
+              "label": "crossdoc-atom initCrossdoc",
+              "command": "crossdoc-atom:initCrossdoc"
             },
             {
               "label": "crossdoc-atom createComment",
