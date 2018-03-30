@@ -1,9 +1,0 @@
-FILE USED FOR TESTING OF INTERFACE
-
-TESTING
-
-REVERSE TEST: WordToReverse
-
-INSERT TEST: *insert after this text* Cdoc #000001abc:
-
-DELETE TEST: *delete text after this* blahalajdsfdh
