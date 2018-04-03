@@ -86,11 +86,15 @@ def store_is_valid(store):
 def wiki_request(store, **params):
   """Build a network request for a given store"""
 
+  # Default parameter
   params["format"] = "json"
-  url = "{}?{}".format(os.path.join(store, WIKI_API_FILE),
-                       urllib.parse.urlencode(params))
 
-  res = urllib.request.urlopen(url)
+  # Build request
+  url = os.path.join(store, WIKI_API_FILE)
+  data = urllib.parse.urlencode(params).encode()
+  res = urllib.request.urlopen(url, data)
+
+  # Return JSON results
   return json.loads(res.read().decode("utf-8"))
 
 
@@ -190,6 +194,7 @@ def find_comment(anchor, store=None):
         res_data = wiki_request(curr_store, action="query",
                                 list="allpages", apprefix="&")
       except Exception:
+        nth_store += 1
         continue
 
       anchors = res_data["query"]["allpages"]
@@ -226,18 +231,23 @@ def find_comment(anchor, store=None):
         wikitext = wiki_request(curr_store, action="parse", prop="wikitext",
                                 pageid=matching_anchors[0]["pageid"])
       except Exception:
+        nth_store += 1
         continue
 
       wikitext = wikitext["parse"]["wikitext"]["*"]
       anchor_json = []
+      set_id = 1
 
       # Parse the wikitext into json
       for line in wikitext.split("\n"):
 
         if line.startswith("=="):
-          anchor_json.append({})
-          anchor_json[-1]["set"] = line.strip("=").strip()
-          anchor_json[-1]["comment"] = []
+          anchor_json.append({
+            "set_id": set_id,
+            "set": line.strip("=").strip(),
+            "comment": []
+          })
+          set_id += 1
 
         elif len(anchor_json):
           anchor_json[-1]["comment"] += [line]
@@ -249,7 +259,7 @@ def find_comment(anchor, store=None):
         item["comment"] = re.sub("(?<!\\n)\\n(?!\\n)", " ",
                                  "\n".join(item["comment"]))
 
-      return None, anchor_json
+      return (curr_store, int(matching_anchors[0]["pageid"])), anchor_json
 
 
 def add_anchor_prefix(anchor):

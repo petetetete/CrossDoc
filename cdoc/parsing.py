@@ -10,7 +10,7 @@ HELP_FLAGS = ["--h", "--help"]
 
 
 # Processes the command line input and runs the appropriate function
-def process_command(argv):
+def process_command(argv=[]):
 
   # They didn't give us anything
   if len(argv) == 1:

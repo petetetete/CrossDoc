@@ -171,11 +171,23 @@ def update_comment(anchor: "-anchor -a",
     Logger.fatal("comment set not found")
 
   # Update set and update json
-  else:
-    anchor_json[set_i]["comment"] = text
+  anchor_json[set_i]["comment"] = text
 
+  if not isinstance(file_path, tuple):  # Local
     with open(file_path, "w") as file:
       json.dump(anchor_json, file, indent=4, sort_keys=True)
+
+  else:  # Remote
+
+    # TODO: Authentication
+    try:
+      section_text = "=== " + set + " ===\n" + text
+      wiki_request(file_path[0], action="edit", pageid=file_path[1],
+                   section=anchor_json[set_i]["set_id"], token="+\\",
+                   text=section_text)
+
+    except Exception:
+      Logger.fatal("unable to update remote source")
 
   return ("set \"" + anchor_json[set_i]["set"] + "\" at \"" +
           add_anchor_prefix(anchor) + "\" updated")
