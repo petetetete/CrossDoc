@@ -129,7 +129,20 @@ def delete_comment(anchor: "-anchor -a",
 
   # If no set specified, delete the whole comment
   if set is None:
-    os.remove(file_path)
+
+    if not isinstance(file_path, tuple):  # Local
+      os.remove(file_path)
+
+    else:  # Remote
+
+      try:
+        # TODO: Authentication, this needs a different token
+        wiki_request(file_path[0], action="delete", pageid=file_path[1],
+                     token="+\\")
+
+      except Exception:
+        Logger.fatal("unable to delete remote comment")
+
     return "anchor \"" + add_anchor_prefix(anchor) + "\" deleted"
 
   # If we only want to delete a specific set
@@ -143,16 +156,28 @@ def delete_comment(anchor: "-anchor -a",
     if set_i is None:
       Logger.fatal("comment set not found")
 
-    # Delete set and update json
-    else:
+    if not isinstance(file_path, tuple):  # Local
+
+      # Delete set and update json
       set_name = anchor_json[set_i]["set"]
       del anchor_json[set_i]
 
       with open(file_path, "w") as file:
         json.dump(anchor_json, file, indent=4, sort_keys=True)
 
-      return ("set \"" + set_name + "\" at \"" +
-              add_anchor_prefix(anchor) + "\" deleted")
+    else:  # Remote
+
+      try:
+        # TODO: Authentication
+        wiki_request(file_path[0], action="edit", pageid=file_path[1],
+                     section=anchor_json[set_i]["set_id"], token="+\\",
+                     text="")
+
+      except Exception:
+        Logger.fatal("unable to delete remote comment set")
+
+    return ("set \"" + set_name + "\" at \"" +
+            add_anchor_prefix(anchor) + "\" deleted")
 
 
 def update_comment(anchor: "-anchor -a",
@@ -179,8 +204,8 @@ def update_comment(anchor: "-anchor -a",
 
   else:  # Remote
 
-    # TODO: Authentication
     try:
+      # TODO: Authentication
       section_text = "=== " + set + " ===\n" + text
       wiki_request(file_path[0], action="edit", pageid=file_path[1],
                    section=anchor_json[set_i]["set_id"], token="+\\",
