@@ -3,6 +3,7 @@ import os
 import json
 import urllib.request
 import re
+import http.cookiejar
 
 # Our module imports
 from .logging import Logger
@@ -13,6 +14,10 @@ DEFAULT_SET = "No Set"
 ANCHOR_EXTENSION = ".json"
 ANCHOR_HOOK = "<&> "
 WIKI_API_FILE = "api.php"
+
+# HTTP opener
+cj = http.cookiejar.CookieJar()
+opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
 
 
 def create_config(data, override=False):
@@ -92,10 +97,26 @@ def wiki_request(store, **params):
   # Build request
   url = os.path.join(store, WIKI_API_FILE)
   data = urllib.parse.urlencode(params).encode()
-  res = urllib.request.urlopen(url, data)
+  res = opener.open(url, data)
 
   # Return JSON results
   return json.loads(res.read().decode("utf-8"))
+
+
+def get_admin_token(store):
+
+  # Get login token
+  res_data = wiki_request(store, action="query", meta="tokens", type="login")
+  token = res_data["query"]["tokens"]["logintoken"]
+
+  # Login to the account
+  wiki_request(store, action="login", lgname="Pete@Main",
+               lgpassword="7u0e455t0jtcfaalhoh6dubdpjrnmttq",
+               lgtoken=token)
+
+  # Get csrf token
+  res_data = wiki_request(store, action="query", meta="tokens", type="csrf")
+  return res_data["query"]["tokens"]["csrftoken"]
 
 
 def find_store(store=None, nth_valid=1, raise_errors=False):

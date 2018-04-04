@@ -135,10 +135,13 @@ def delete_comment(anchor: "-anchor -a",
 
     else:  # Remote
 
+      # Get admin csrf token
+      token = get_admin_token(file_path[0])
+
       try:
         # TODO: Authentication, this needs a different token
         wiki_request(file_path[0], action="delete", pageid=file_path[1],
-                     token="+\\")
+                     token=token)
 
       except Exception:
         Logger.fatal("unable to delete remote comment")
