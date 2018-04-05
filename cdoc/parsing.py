@@ -89,6 +89,12 @@ def process_command(argv=[]):
       elif isinstance(param.default, bool):
         finalParams.append(True)
 
+      elif isinstance(param.default, int):
+        try:
+          finalParams.append(int(matchingArg))
+        except Exception:
+          pass
+
       # Default expects a single, and they gave it to us, so pass it along
       elif len(matchingArg) > 0:
         finalParams.append(matchingArg[0])

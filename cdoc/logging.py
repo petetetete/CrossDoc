@@ -44,12 +44,19 @@ class Logger:
 
       for name, param in calleeParams:
         required = param.default == Parameter.empty
-        takesList = isinstance(param.default, list)
-        takesBool = isinstance(param.default, bool)
+
+        if isinstance(param.default, list):
+          paramType = "<list>"
+        elif isinstance(param.default, bool):
+          paramType = ""
+        elif isinstance(param.default, int):
+          paramType = "<int>"
+        else:
+          paramType = "<str>"
 
         output += "[" if not required else ""
         output += param.annotation.split()[0]
-        output += "" if takesBool else " <list>" if takesList else " <value>"
+        output += " " + paramType
         output += "] " if not required else " "
 
     # Print the default usage message
@@ -64,7 +71,8 @@ class Logger:
       output += "\n  -       = parameter identifier"
       output += "\n  --      = flag identifier (boolean, no input required)"
       output += "\n  []      = an optional command parameter"
-      output += "\n  <value> = to be replaced with single input"
+      output += "\n  <str>   = to be replaced with single string"
+      output += "\n  <int>   = to be replaced with single number"
       output += "\n  <list>  = to be replaced many inputs"
 
     Logger.standard(output)
