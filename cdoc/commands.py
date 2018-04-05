@@ -88,6 +88,8 @@ def create_comment(text: "-text -t",
   if anchor.startswith(ANCHOR_HOOK):
     anchor_w_hook = anchor
     anchor = anchor[len(ANCHOR_HOOK):]
+  else:
+    anchor_w_hook = add_anchor_prefix(anchor)
 
   # Replace existing set or add new set
   found_set = next((s for s in anchor_json if s["set"] == set), None)
@@ -123,16 +125,27 @@ def create_comment(text: "-text -t",
 
 def fetch_comment(anchor: "-anchor -a",
                   store: "-store -s" = None,
-                  set: "-set" = DEFAULT_SET) -> "fetch-comment fc f":
+                  set: "-set" = DEFAULT_SET,
+                  next_set: "--next-set --ns" = False) -> "fetch-comment fc f":
 
   # Find the referenced comment
   file_path, anchor_json = find_comment(anchor, store)
 
-  found_set = next((s for s in anchor_json if s["set"] == set), None)
-  if found_set:
-    return found_set["comment"]
-  else:
-    Logger.fatal("comment set not found")
+  # Find matching set in json
+  set_i = next((i for i, s in enumerate(anchor_json) if s["set"] == set), None)
+  anchor = add_anchor_prefix(anchor)
+
+  # Return the appropriate comment
+  if set_i is not None:
+    if next_set:
+      comment = anchor_json[(set_i + 1) % len(anchor_json)]
+    else:
+      comment = anchor_json[set_i]
+
+    return anchor + " [" + comment["set"] + "]" + "\n" + comment["comment"]
+
+  # We couldn't find the comment set
+  Logger.fatal("comment set not found")
 
 
 def delete_comment(anchor: "-anchor -a",
