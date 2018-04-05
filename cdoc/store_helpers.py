@@ -110,6 +110,7 @@ def get_admin_token(store):
   token = res_data["query"]["tokens"]["logintoken"]
 
   # Login to the account
+  # TODO: Fix hard coded bot account
   wiki_request(store, action="login", lgname="Pete@Main",
                lgpassword="7u0e455t0jtcfaalhoh6dubdpjrnmttq",
                lgtoken=token)

@@ -70,28 +70,24 @@ def generate_anchor() -> "generate-anchor ga g":
 
 
 def create_comment(text: "-text -t",
-                   store: "-store -st" = None,  # Referenced by index
+                   store: "-store -s" = None,  # Referenced by index
                    anchor: "-anchor -a" = None,
                    set: "-set" = DEFAULT_SET) -> "create-comment cc c":
 
+  # Find the referenced comment
+  if anchor is not None:
+    _, anchor_json = find_comment(anchor, store)
+  else:
+    anchor_json = []
+
   # Determine the anchor to use
   curr_store = find_store(store)
-  anchor_to_use = generate_anchor() if anchor is None else anchor
+  anchor = generate_anchor() if anchor is None else anchor
 
   # Remove anchor hook from path if present
-  if anchor_to_use.startswith(ANCHOR_HOOK):
-    file_name = anchor_to_use[len(ANCHOR_HOOK):]
-  else:
-    file_name = anchor_to_use
-    anchor_to_use = ANCHOR_HOOK + anchor_to_use
-
-  file_path = curr_store + "/" + file_name + ANCHOR_EXTENSION
-
-  # Create list to store sets or get it if it already exists
-  anchor_json = []
-  if os.path.isfile(file_path) and os.stat(file_path).st_size != 0:
-    with open(file_path) as file:
-      anchor_json = json.load(file)
+  if anchor.startswith(ANCHOR_HOOK):
+    anchor_w_hook = anchor
+    anchor = anchor[len(ANCHOR_HOOK):]
 
   # Replace existing set or add new set
   found_set = next((s for s in anchor_json if s["set"] == set), None)
@@ -100,10 +96,29 @@ def create_comment(text: "-text -t",
   else:
     anchor_json.append({"set": set, "comment": text})
 
-  with open(file_path, "w") as file:
-    json.dump(anchor_json, file, indent=4, sort_keys=True)
+  # Create new comment with json
 
-  return anchor_to_use + " [" + set + "]" + "\n" + text
+  if not store_is_remote(curr_store):  # Local
+
+    file_path = os.path.join(curr_store, anchor + ANCHOR_EXTENSION)
+
+    with open(file_path, "w") as file:
+      json.dump(anchor_json, file, indent=4, sort_keys=True)
+
+  else:  # Remote
+
+    wikitext = "\n".join(["=== " + x["set"] + " ===\n" + x["comment"]
+                         for x in anchor_json])
+
+    try:
+      token = get_admin_token(curr_store)  # Get admin csrf token
+      wiki_request(curr_store, action="edit", title="&" + anchor,
+                   text=wikitext, token=token)
+
+    except Exception:
+      Logger.fatal("unable to create remote comment")
+
+  return anchor_w_hook + " [" + set + "]" + "\n" + text
 
 
 def fetch_comment(anchor: "-anchor -a",
@@ -135,11 +150,8 @@ def delete_comment(anchor: "-anchor -a",
 
     else:  # Remote
 
-      # Get admin csrf token
-      token = get_admin_token(file_path[0])
-
       try:
-        # TODO: Authentication, this needs a different token
+        token = get_admin_token(file_path[0])  # Get admin csrf token
         wiki_request(file_path[0], action="delete", pageid=file_path[1],
                      token=token)
 
