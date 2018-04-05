@@ -14,5 +14,9 @@
     {
         "caption": "CrossDoc: Update Comments",
         "command": "update_comments"
+    },
+    {
+        "caption": "CrossDoc: Next Set",
+        "command": "next_set"
     }
 ]
