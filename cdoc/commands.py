@@ -110,7 +110,7 @@ def create_comment(text: "-text -t",
   else:  # Remote
 
     wikitext = "\n".join(["=== " + x["set"] + " ===\n" + x["comment"]
-                         for x in anchor_json])
+                          for x in anchor_json])
 
     try:
       token = get_admin_token(curr_store)  # Get admin csrf token
@@ -126,7 +126,8 @@ def create_comment(text: "-text -t",
 def fetch_comment(anchor: "-anchor -a",
                   store: "-store -s" = None,
                   set: "-set" = DEFAULT_SET,
-                  next_set: "--next-set --ns" = False) -> "fetch-comment fc f":
+                  next_set: "--next-set --ns" = False,
+                  prev_set: "--prev-set --ps" = False) -> "fetch-comment fc f":
 
   # Find the referenced comment
   file_path, anchor_json = find_comment(anchor, store)
@@ -135,12 +136,16 @@ def fetch_comment(anchor: "-anchor -a",
   set_i = next((i for i, s in enumerate(anchor_json) if s["set"] == set), None)
   anchor = add_anchor_prefix(anchor)
 
+  # Find offset based on given parameters
+  comment_offset = 0
+  if next_set:
+    comment_offset += 1
+  if prev_set:
+    comment_offset -= 1
+
   # Return the appropriate comment
   if set_i is not None:
-    if next_set:
-      comment = anchor_json[(set_i + 1) % len(anchor_json)]
-    else:
-      comment = anchor_json[set_i]
+    comment = anchor_json[(set_i + comment_offset) % len(anchor_json)]
 
     return anchor + " [" + comment["set"] + "]" + "\n" + comment["comment"]
 
