@@ -103,3 +103,49 @@ class TestUnitTests(unittest.TestCase):
     create_store(store_name, store_path)
 
     self.assertTrue(os.path.isdir(os.path.join(store_path, store_name)))
+
+  # create_comment tests
+
+  def test_create_comment_no_params(self):
+
+    with self.assertRaises(TypeError):
+      create_comment()
+
+  def test_create_comment_not_init(self):
+
+    with self.assertRaises(SystemExit):
+      create_comment("Example")
+
+  def test_create_comment(self):
+
+    project_init()
+    create_store()
+    create_comment("My new comment")
+
+  # fetch_comment tests
+
+  def test_fetch_comment_no_params(self):
+
+    with self.assertRaises(TypeError):
+      fetch_comment()
+
+  def test_fetch_comment_not_init(self):
+
+    with self.assertRaises(SystemExit):
+      fetch_comment("555")
+
+  def test_fetch_comment_no_comment(self):
+
+    project_init()
+    create_store()
+
+    with self.assertRaises(SystemExit):
+      fetch_comment("98796")
+
+  def test_fetch_comment(self):
+
+    project_init()
+    create_store()
+
+    create_comment("An example comment", anchor="dfa89")
+    fetch_comment("dfa89")

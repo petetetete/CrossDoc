@@ -187,7 +187,7 @@ def find_store(store=None, nth_valid=1, raise_errors=False):
       Logger.fatal("no valid comment stores found")
 
 
-def find_comment(anchor, store=None):
+def find_comment(anchor, store=None, raise_errors=False):
   """Find the comment in the specified store or any store"""
 
   # Remove anchor hook if it exists
@@ -197,10 +197,14 @@ def find_comment(anchor, store=None):
   nth_store = 1
 
   while True:
-    try:
+    if raise_errors:
       curr_store = find_store(store, nth_store, True)
-    except ValueError:
-      Logger.fatal("comment anchor not found")
+
+    else:
+      try:
+        curr_store = find_store(store, nth_store, True)
+      except ValueError:
+        Logger.fatal("comment anchor not found")
 
     # Get the matching anchors #
 

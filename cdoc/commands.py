@@ -78,10 +78,12 @@ def create_comment(text: "-text -t",
                    set: "-set" = DEFAULT_SET) -> "create-comment cc c":
 
   # Find the referenced comment
+  anchor_json = []
   if anchor is not None:
-    _, anchor_json = find_comment(anchor, store)
-  else:
-    anchor_json = []
+    try:
+      _, anchor_json = find_comment(anchor, store, True)
+    except ValueError:
+      pass
 
   # Determine the anchor to use
   curr_store = find_store(store)
