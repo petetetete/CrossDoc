@@ -26,8 +26,8 @@ def create_config(data, override=False):
   if not override and os.path.isfile(CONFIG_NAME):
     Logger.fatal("configuration file already exists")
 
-  output = open(CONFIG_NAME, "w")
-  json.dump(data, output, indent=4, separators=(',', ': '), sort_keys=True)
+  with open(CONFIG_NAME, "w") as output:
+    json.dump(data, output, indent=4, separators=(',', ': '), sort_keys=True)
 
 
 def get_config():

@@ -62,7 +62,7 @@ def create_store(name: "-name -n" = "cdoc-store",
 
 def generate_anchor() -> "generate-anchor ga g":
 
-  hash_length = 16
+  hash_length = 8
   string_to_hash = str(time.time()) + "|" + str(random.uniform(0, 1))
   final_hash = hashlib.md5(string_to_hash.encode("utf-8")).hexdigest()
 
