@@ -149,3 +149,59 @@ class TestUnitTests(unittest.TestCase):
 
     create_comment("An example comment", anchor="dfa89")
     fetch_comment("dfa89")
+
+  # delete_comment tests
+
+  def test_delete_comment_no_params(self):
+
+    with self.assertRaises(TypeError):
+      delete_comment()
+
+  def test_delete_comment_not_init(self):
+
+    with self.assertRaises(SystemExit):
+      delete_comment("98765")
+
+  def test_delete_comment_no_comment(self):
+
+    project_init()
+    create_store()
+
+    with self.assertRaises(SystemExit):
+      delete_comment("2325dfa")
+
+  def test_delete_comment(self):
+
+    project_init()
+    create_store()
+
+    create_comment("Going to be deleted!", anchor="d3l37em3")
+    delete_comment("d3l37em3")
+
+  # update_comment tests
+
+  def test_update_comment_no_params(self):
+
+    with self.assertRaises(TypeError):
+      update_comment()
+
+  def test_update_comment_not_init(self):
+
+    with self.assertRaises(SystemExit):
+      update_comment("anchor", "words")
+
+  def test_update_comment_no_comment(self):
+
+    project_init()
+    create_store()
+
+    with self.assertRaises(SystemExit):
+      update_comment("dfe69", "my new words!")
+
+  def test_update_comment(self):
+
+    project_init()
+    create_store()
+
+    create_comment("a plain boring comment", anchor="98f4we8f")
+    update_comment("98f4we8f", "New words!")
