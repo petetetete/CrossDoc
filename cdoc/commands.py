@@ -36,7 +36,10 @@ def project_init(name: "-name -n" = "Default CrossDoc Project Name",
 
 
 def create_store(name: "-name -n" = "cdoc-store",
-                 path: "-path -p" = os.getcwd()) -> "create-store cs":
+                 path: "-path -p" = None) -> "create-store cs":
+
+  if path is None:
+    path = os.getcwd()
 
   # Get full path from given info
   # TODO: Consider error checking here
@@ -47,7 +50,7 @@ def create_store(name: "-name -n" = "cdoc-store",
     try:
       os.makedirs(full_path)
     except OSError:
-      logger.fatal("unable to create directory")
+      Logger.fatal("unable to create directory")
 
   # Get current config settings and add store
   config = get_config()
