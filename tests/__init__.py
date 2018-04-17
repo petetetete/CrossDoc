@@ -1,5 +1,4 @@
 import os
-import shutil
 import unittest
 import tests.unit_tests
 import tests.integration_tests
