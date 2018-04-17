@@ -4,6 +4,7 @@ import json
 import urllib.request
 import re
 import http.cookiejar
+from datetime import datetime
 
 # Our module imports
 from .logging import Logger
@@ -187,7 +188,7 @@ def find_store(store=None, nth_valid=1, raise_errors=False):
       Logger.fatal("no valid comment stores found")
 
 
-def find_comment(anchor, store=None, raise_errors=False):
+def find_comment(anchor, store=None, raise_errors=False, get_time=False):
   """Find the comment in the specified store or any store"""
 
   # Remove anchor hook if it exists
@@ -246,21 +247,33 @@ def find_comment(anchor, store=None, raise_errors=False):
       anchor_json = []
       if os.path.isfile(file_path) and os.stat(file_path).st_size != 0:
         with open(file_path) as file:
+          time_since = os.path.getmtime(file_path)
           anchor_json = json.load(file)
 
-      # TODO: Modify to use some other method than file_path
+      if get_time:
+        return file_path, anchor_json, time_since
+
       return file_path, anchor_json
 
     else:  # If we are looking at a remote store
 
+      pageid = matching_anchors[0]["pageid"]
+
       try:
         wikitext = wiki_request(curr_store, action="parse", prop="wikitext",
-                                pageid=matching_anchors[0]["pageid"])
+                                pageid=pageid)
+        wikitext = wikitext["parse"]["wikitext"]["*"]
+
+        if get_time:
+          rev_time = wiki_request(curr_store, action="query", prop="revisions",
+                                  pageids=pageid, rvprop="timestamp")
+          rev_time = rev_time["query"]["pages"][str(pageid)]["revisions"][0]
+          rev_time = datetime.strptime(rev_time["timestamp"],
+                                       "%Y-%m-%dT%H:%M:%SZ")
       except Exception:
         nth_store += 1
         continue
 
-      wikitext = wikitext["parse"]["wikitext"]["*"]
       anchor_json = []
       set_id = 1
 
@@ -285,7 +298,14 @@ def find_comment(anchor, store=None, raise_errors=False):
         item["comment"] = re.sub("(?<!\\n)\\n(?!\\n)", " ",
                                  "\n".join(item["comment"]))
 
-      return (curr_store, int(matching_anchors[0]["pageid"])), anchor_json
+      wiki_tuple = (curr_store, int(pageid))
+
+      if get_time:
+        time_since = (rev_time -
+                      datetime.utcfromtimestamp(0)).total_seconds() * 1000
+        return wiki_tuple, anchor_json, time_since
+
+      return wiki_tuple, anchor_json
 
 
 def add_anchor_prefix(anchor):

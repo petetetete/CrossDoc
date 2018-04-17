@@ -221,10 +221,16 @@ def delete_comment(anchor: "-anchor -a",
 def update_comment(anchor: "-anchor -a",
                    text: "-text -t",
                    store: "-store -s" = None,
+                   time: "-time" = None,
                    set: "-set" = DEFAULT_SET) -> "update-comment uc u":
 
   # Find the referenced comment
-  file_path, anchor_json = find_comment(anchor, store)
+  if time is not None:
+    time = float(time)
+    file_path, anchor_json, old_time = find_comment(anchor, store, False, True)
+    old_time = float(old_time)
+  else:
+    file_path, anchor_json = find_comment(anchor, store)
 
   set_i = next((i for i, s in enumerate(anchor_json)
                 if s["set"] == set), None)
@@ -233,14 +239,16 @@ def update_comment(anchor: "-anchor -a",
   if set_i is None:
     Logger.fatal("comment set not found")
 
-  # Update set and update json
-  anchor_json[set_i]["comment"] = text
+  if time is None or time > old_time:
+
+    # Update set and update json
+    anchor_json[set_i]["comment"] = text
 
   if not isinstance(file_path, tuple):  # Local
     with open(file_path, "w") as file:
       json.dump(anchor_json, file, indent=4, sort_keys=True)
 
-  else:  # Remote
+  elif time is None or time > old_time:  # Remote
 
     try:
       # TODO: Authentication
@@ -252,8 +260,8 @@ def update_comment(anchor: "-anchor -a",
     except Exception:
       Logger.fatal("unable to update remote source")
 
-  return ("set \"" + anchor_json[set_i]["set"] + "\" at \"" +
-          add_anchor_prefix(anchor) + "\" updated")
+  return (add_anchor_prefix(anchor) + " [" + anchor_json[set_i]["set"] + "]" +
+          "\n" + anchor_json[set_i]["comment"])
 
 
 def hide_comments(files: "-files -f" = []) -> "hide-comments hc h":
