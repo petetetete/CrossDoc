@@ -8,5 +8,6 @@
     { "keys": ["ctrl+c+i"], "command": "insert_comment" },
     { "keys": ["ctrl+c+d"], "command": "delete_comment" },
     { "keys": ["ctrl+c+u"], "command": "update_comments" },
-    { "keys": ["ctrl+c+n"], "command": "next_set" }
+    { "keys": ["ctrl+c+n"], "command": "next_set" },
+    { "keys": ["ctrl+c+p"], "command": "prev_set" }
 ]

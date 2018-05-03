@@ -1,9 +1,11 @@
 import sublime
 import sublime_plugin
 from subprocess import check_output
+from time import time
 import os
 
 ANCHOR_HOOK = "<&> "
+last_saved = time() * 1000
 
 
 class InitCommand(sublime_plugin.TextCommand):
@@ -83,7 +85,7 @@ class UpdateCommentsCommand(sublime_plugin.TextCommand):
     h_regions = [x for x in c_regions if ANCHOR_HOOK in v.substr(x)]
 
     # For all CrossDoc hook regions
-    for h_region in h_regions:
+    for h_region in reversed(h_regions):
 
       # Save the current hook regions line number and line text
       h_line_num = l_regions.index(h_region) + 1
@@ -113,16 +115,27 @@ class UpdateCommentsCommand(sublime_plugin.TextCommand):
         " ".join(v.substr(x).lstrip().split(" ")[1:]) for x in t_regions
       ])
 
+      global last_saved
+
       # Get current working directory and run update
       cwd = os.path.dirname(v.file_name())
-      output = check_output("cdoc uc -a " + anchor + " -t \"" +
-                            text + "\" -set \"" + set + "\"",
+      output = check_output("cdoc uc -a " + anchor + " -t \"" + text +
+                            "\" -set \"" + set + "\"" + " -time \"" +
+                            str(last_saved) + "\"",
                             shell=True, cwd=cwd).decode("utf-8").rstrip()
 
       # Catch command line errors
       if output.startswith("fatal"):
         print("warning: unable to update comment at line", h_line_num)
         return
+
+      # Delete existing comment
+      deleteComment(edit, v, h_region)
+
+      # Insert comment in to file
+      insertComment(edit, v, h_region, output)
+
+    last_saved = time() * 1000
 
 
 class NextSetCommand(sublime_plugin.TextCommand):
@@ -150,11 +163,36 @@ class NextSetCommand(sublime_plugin.TextCommand):
     insertComment(edit, v, v.line(v.sel()[0]), output)
 
 
+class PrevSetCommand(sublime_plugin.TextCommand):
+
+  def run(self, edit):
+    v = self.view
+
+    # Get comment info
+    h_region, anchor, set = getCommentInfo(edit, v)
+
+    # Get current working directory and run delete
+    cwd = os.path.dirname(v.file_name())
+    output = check_output("cdoc fc -a " + anchor + " -set \"" + set + "\" --ps",
+                          shell=True, cwd=cwd).decode("utf-8").rstrip()
+
+    # Catch command line errors
+    if output.startswith("fatal"):
+      print(output)
+      return
+
+    # Delete existing comment
+    deleteComment(edit, v, h_region)
+
+    # Insert comment in to file
+    insertComment(edit, v, v.line(v.sel()[0]), output)
+
+
 # Event listener callbacks
 
 class UpdateOnSave(sublime_plugin.EventListener):
 
-  def on_post_save_async(self, v):
+  def on_pre_save(self, v):
     v.run_command("update_comments")
 
 

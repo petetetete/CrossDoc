@@ -18,5 +18,9 @@
     {
         "caption": "CrossDoc: Next Set",
         "command": "next_set"
+    },
+    {
+        "caption": "CrossDoc: Previous Set",
+        "command": "prev_set"
     }
 ]
