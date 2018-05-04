@@ -196,6 +196,9 @@ body {
 
     padding: 10px 20px;
 }
+    .body-container--wider {
+        max-width: 1250px;
+    }
 
 .cols-2 {
     display: grid;
