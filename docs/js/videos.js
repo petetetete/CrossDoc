@@ -1,7 +1,7 @@
 function changeVideo() {
     links.forEach(link => link.classList.remove("videos__link--selected"))
     this.classList.add("videos__link--selected")
-    video.src = `videos/${this.dataset.src}.mp4`;
+    video.src = `videos/${this.dataset.src}.mp4#t=0.01`;
 }
 
 function setVideoHeight() {
