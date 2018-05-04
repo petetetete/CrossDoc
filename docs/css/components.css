@@ -360,6 +360,15 @@
         border-bottom: 1px solid #DFDFDF;
         cursor: pointer;
     }
+    .videos__link-title {
+        background: #298cff;
+        color: #fff;
+        padding: 10px 14px;
+        text-align: center;
+        font-weight: 300;
+        font-size: 1.25rem;
+        margin-top: -1px;
+    }
     .videos__link:last-child {
         border-bottom-color: transparent;
     }

@@ -58,7 +58,7 @@
         <div class="page-head" id="js-pageHead">
             <div class="page-head__container">
                 <h2 class="page-head__heading">Videos</h2>
-                <p class="page-head__paragraph">CrossDoc video tutorials and guides. Videos can be selected by clicking the element in the list. The [CL] tag refers to the command line tool and the [TE] tag refers to the text editor plugins.</p>
+                <p class="page-head__paragraph">CrossDoc video tutorials and guides. Videos can be selected by clicking the element in the list. There are several different categories of videos, namely Text Editor, Remote Wiki, and Command Line Videos.</p>
             </div>
         </div>
 
@@ -74,17 +74,22 @@
                     <a class="videos__link videos__link--selected" data-src="cl_install">Install command line tool</a>
 
                     <!-- TODO: Install TE plugins -->
-                    <!-- Text editor videos -->
-                    <a class="videos__link" data-src="sublime_init">[TE] Sublime initialize repo</a>
-                    <a class="videos__link" data-src="sublime_create_store">[TE] Sublime create store</a>
+                    <div class="videos__link-title">Text Editor Videos</div>
+                    <a class="videos__link" data-src="sublime_init">Sublime initialize repo</a>
+                    <a class="videos__link" data-src="sublime_create_store">Sublime create store</a>
 
-                    <!-- Command line videos -->
-                    <a class="videos__link" data-src="cl_init">[CL] Initialize repo</a>
-                    <a class="videos__link" data-src="cl_create_store">[CL] Create store</a>
-                    <a class="videos__link" data-src="cl_create_comment">[CL] Create comment</a>
-                    <a class="videos__link" data-src="cl_update_comment">[CL] Update comment</a>
-                    <a class="videos__link" data-src="cl_fetch_comment">[CL] Fetch comment</a>
-                    <a class="videos__link" data-src="cl_delete_comment">[CL] Delete comment</a>
+                    <div class="videos__link-title">Remote Wiki Videos</div>
+                    <a class="videos__link" data-src="wiki_edit_comment">Edit comment</a>
+                    <a class="videos__link" data-src="wiki_create_set">Create set</a>
+                    <a class="videos__link" data-src="wiki_delete_set">Delete set</a>
+
+                    <div class="videos__link-title">Command Line Videos</div>
+                    <a class="videos__link" data-src="cl_init">Initialize repo</a>
+                    <a class="videos__link" data-src="cl_create_store">Create store</a>
+                    <a class="videos__link" data-src="cl_create_comment">Create comment</a>
+                    <a class="videos__link" data-src="cl_update_comment">Update comment</a>
+                    <a class="videos__link" data-src="cl_fetch_comment">Fetch comment</a>
+                    <a class="videos__link" data-src="cl_delete_comment">Delete comment</a>
                 </div>
             </div>
         </div>
