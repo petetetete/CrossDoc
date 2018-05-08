@@ -7,6 +7,4 @@ integration
 Installation
 ------------
 
-To "install" a git hook in a particular repository, you would copy the file
-into the ``.git\hooks\`` directory of your project. For example, to install
-the ``pre-commit`` hook should be saved as ``.git\hooks\pre-commit``.
+To install the CrossDoc Pre and Post commit hooks, store the three supplied files; pre-commit, pre-commit.py, and post-commit to your \.git\hooks folder.
