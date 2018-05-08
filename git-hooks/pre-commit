@@ -1,12 +1,12 @@
 #!/bin/sh
+#grabbing git info in shell, then moving to python for script
 
-# TODO: Remove
-# Just an example
-echo "CrossDoc custom pre-commit hook message [TEST]"
+#grab a copy of what returns from git diff: In our case the cached "staged docs", then using echo to place the file location in PreCommitStorage.txt
+var=$(git diff --name-only --cached)
+echo "$var" > PreCommitStorage.txt
 
-# Currently just interprets the "pip-less" module
-# Passes the names of the changed files to reduce file searching
-python -m cdoc hc -f $(git diff --cached --name-only --diff-filter=ACM)
+#now that we saved the staged filenames, we can run the py script
+python C:/Users/Kris/.git/hooks/pre-commit.py
 
-# Stop commit from executing (non-zero exitgit)
-exit 1
+#re-add the file, after changes have happened in script
+git add $var
